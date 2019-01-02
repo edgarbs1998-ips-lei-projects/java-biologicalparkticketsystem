@@ -53,6 +53,10 @@ public class CourseManager {
         this.digraph = new DiGraph<>();
     }
     
+    public DiGraph<PointOfInterest, Connection> getDigraph() {
+        return this.digraph;
+    }
+    
     public void loadCourseMapFile(String path) {
         try {
             File file = new File(path);
