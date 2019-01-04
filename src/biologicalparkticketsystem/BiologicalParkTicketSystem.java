@@ -3,10 +3,15 @@ package biologicalparkticketsystem;
 import biologicalparkticketsystem.controller.ConfigManager;
 import biologicalparkticketsystem.model.Connection;
 import biologicalparkticketsystem.controller.CourseManager;
+import biologicalparkticketsystem.controller.DocumentManager;
 import biologicalparkticketsystem.model.CalculatedPath;
 import biologicalparkticketsystem.model.PointOfInterest;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -56,26 +61,35 @@ public class BiologicalParkTicketSystem extends Application {
 //        logger.getLogger().fine("Teste3");
 //        logger.getLoggerCourseCalculations().info("Teste2");
 //        logger.getLoggerCourseCalculations().fine("Teste4");
+        
+//        CourseManager courseManager = new CourseManager();
+//        courseManager.loadCourseMapFile(config.getProperties().getProperty("mapFile"));
+//        
+//        System.out.println(courseManager.toString());
+//        
+//        PointOfInterest poiStart = courseManager.getPointOfInterestById(1);
+//        
+//        List<PointOfInterest> mustVisitPois = new ArrayList<>();
+//        PointOfInterest poi1 = courseManager.getPointOfInterestById(5);
+//        mustVisitPois.add(poi1);
+//        PointOfInterest poi2 = courseManager.getPointOfInterestById(8);
+//        mustVisitPois.add(poi2);
+//        PointOfInterest poi3 = courseManager.getPointOfInterestById(4);
+//        mustVisitPois.add(poi3);
+//        
+//        testMinimumCostPath(courseManager, CourseManager.Criteria.DISTANCE, poiStart, mustVisitPois, false);
+//        testMinimumCostPath(courseManager, CourseManager.Criteria.COST, poiStart, mustVisitPois, false);
+//        testMinimumCostPath(courseManager, CourseManager.Criteria.DISTANCE, poiStart, mustVisitPois, true);
+//        testMinimumCostPath(courseManager, CourseManager.Criteria.COST, poiStart, mustVisitPois, true);
 
-        CourseManager courseManager = new CourseManager();
-        courseManager.loadCourseMapFile(config.getProperties().getProperty("mapFile"));
-        
-        System.out.println(courseManager.toString());
-        
-        PointOfInterest poiStart = courseManager.getPointOfInterestById(1);
-        
-        List<PointOfInterest> mustVisitPois = new ArrayList<>();
-        PointOfInterest poi1 = courseManager.getPointOfInterestById(5);
-        mustVisitPois.add(poi1);
-        PointOfInterest poi2 = courseManager.getPointOfInterestById(8);
-        mustVisitPois.add(poi2);
-        PointOfInterest poi3 = courseManager.getPointOfInterestById(4);
-        mustVisitPois.add(poi3);
-        
-        testMinimumCostPath(courseManager, CourseManager.Criteria.DISTANCE, poiStart, mustVisitPois, false);
-        testMinimumCostPath(courseManager, CourseManager.Criteria.COST, poiStart, mustVisitPois, false);
-        testMinimumCostPath(courseManager, CourseManager.Criteria.DISTANCE, poiStart, mustVisitPois, true);
-        testMinimumCostPath(courseManager, CourseManager.Criteria.COST, poiStart, mustVisitPois, true);
+        try {
+            DocumentManager documentManager = new DocumentManager(config);
+            documentManager.generateTicket();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(BiologicalParkTicketSystem.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(BiologicalParkTicketSystem.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private static void testMinimumCostPath(CourseManager courseManager,
