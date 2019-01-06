@@ -15,6 +15,12 @@ public class Client {
     private String nif;
     private Address address;
     
+    public Client() { }
+    
+    public Client(String name, String nif) {
+        this(name, nif, null);
+    }
+    
     public Client(String name, String nif, Address address) {
         this.name = name;
         this.nif = nif;
@@ -44,4 +50,53 @@ public class Client {
     public void setAddress(Address address) {
         this.address = address;
     }
+    
+    public class Address {
+
+        private String address;
+        private String postalCode;
+        private String location;
+        private String country;
+
+        public Address(String address, String postalCode, String location, String country) {
+            this.address = address;
+            this.postalCode = postalCode;
+            this.location = location;
+            this.country = country;
+        }
+
+        public String getAddress() {
+            return this.address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public String getPostalCode() {
+            return this.postalCode;
+        }
+
+        public void setPostalCode(String postalCode) {
+            this.postalCode = postalCode;
+        }
+
+        public String getLocation() {
+            return this.location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
+        }
+
+        public String getCountry() {
+            return this.country;
+        }
+
+        public void setCountry(String country) {
+            this.country = country;
+        }
+
+    }
+    
 }

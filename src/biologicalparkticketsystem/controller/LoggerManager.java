@@ -16,6 +16,7 @@ import java.util.logging.SimpleFormatter;
  * @author goldspy98
  */
 public class LoggerManager {
+    
     private static LoggerManager instance = new LoggerManager();
     
     private Logger logger;

@@ -4,6 +4,7 @@ import biologicalparkticketsystem.model.CalculatedPath;
 import biologicalparkticketsystem.model.Client;
 import biologicalparkticketsystem.model.Connection;
 import biologicalparkticketsystem.model.PointOfInterest;
+import biologicalparkticketsystem.model.Ticket;
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.font.PdfFont;
@@ -48,11 +49,10 @@ public class DocumentManager {
         this.companyData = companyData;
         this.vat = vat;
         
-        // TODO Test this
         // Create the path folder if it does not exists
         if (!this.documentPath.equals("")) {
             File file = new File(this.documentPath);
-            file.getParentFile().mkdirs();
+            file.mkdirs();
         }
     }
     
@@ -69,6 +69,10 @@ public class DocumentManager {
     }
     
     private void generateTicket(String uniqueId, CalculatedPath calculatedPath, Client client) throws FileNotFoundException, IOException {
+        Ticket ticket = new Ticket();
+        ticket.setUid(uniqueId);
+        ticket.setItems(new ArrayList<>());
+        
         int totalDistance = 0; // Path total distance
         int totalCost = 0; // Path total cost
         
@@ -236,6 +240,15 @@ public class DocumentManager {
                 cell.setTextAlignment(TextAlignment.RIGHT);
                 table.addCell(cell);
                 
+                // Save on ticket item
+                Ticket.Item ticketItem = ticket.new Item();
+                ticketItem.setPathName(connection.getConnectionName());
+                ticketItem.setFromPoint(fromPoint.getPoiName());
+                ticketItem.setToPoint(toPoint.getPoiName());
+                ticketItem.setDistance(connection.getDistance());
+                ticketItem.setCost(connection.getCostEuros());
+                ticket.getItems().add(ticketItem);
+                
                 fromPoint = toPoint;
                 toPoint = (pointsOfInterestIterator.hasNext() ? pointsOfInterestIterator.next() : firstPoint);
             }
@@ -319,6 +332,15 @@ public class DocumentManager {
             document.close();
             
         }
+        
+        ticket.setIssueDate(simpleDateFormat.format(now));
+        ticket.setClientNif((client == null ? "customer" : client.getNif()));
+        ticket.setPathType((calculatedPath.getNavigability() == true ? 1 : 0));
+        ticket.setPathCriteria(calculatedPath.getCriteria().getName());
+        ticket.setTotalDistance(totalDistance);
+        ticket.setTotalCost(totalCost);
+        
+        DaoManager.getInstance().getTicketDao().insertTicket(ticket);
     }
     
     private void generateInvoice(String uniqueId, CalculatedPath calculatedPath, Client client) throws FileNotFoundException, IOException {

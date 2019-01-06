@@ -2,17 +2,14 @@ package biologicalparkticketsystem;
 
 import biologicalparkticketsystem.controller.ConfigManager;
 import biologicalparkticketsystem.controller.CourseManager;
+import biologicalparkticketsystem.controller.DaoManager;
 import biologicalparkticketsystem.controller.DocumentManager;
 import biologicalparkticketsystem.controller.MapManager;
-import biologicalparkticketsystem.model.Address;
 import biologicalparkticketsystem.model.Client;
 import biologicalparkticketsystem.model.PointOfInterest;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import biologicalparkticketsystem.model.Ticket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -86,24 +83,32 @@ public class BiologicalParkTicketSystem extends Application {
         courseManager.minimumCriteriaPath(CourseManager.Criteria.COST, true, mustVisitPois);
         System.out.println(courseManager.toString());
         
-        Address companyAddress = new Address(
+        Client companyData = new Client(
+                config.getProperties().get("company.name").toString(),
+                config.getProperties().get("company.nif").toString()
+        );
+        Client.Address companyAddress = companyData.new Address(
                 config.getProperties().get("company.address.adress").toString(),
                 config.getProperties().get("company.address.postal_code").toString(),
                 config.getProperties().get("company.address.location").toString(),
                 config.getProperties().get("company.address.country").toString()
         );
-        Client companyData = new Client(
-                config.getProperties().get("company.name").toString(),
-                config.getProperties().get("company.nif").toString(),
-                companyAddress
-        );
+        companyData.setAddress(companyAddress);
         
-        Address clientAddress = new Address("Est. da Charneca", "2665-506", "Venda do Pinheiro", "Portugal");
-        Client client = new Client("Edgar Santos", "267400292", clientAddress);
+        Client client = new Client("Edgar Santos", "267400292");
+        Client.Address clientAddress = client.new Address("Est. da Charneca", "2665-506", "Venda do Pinheiro", "Portugal");
+        client.setAddress(clientAddress);
+        
+        DaoManager daoManager = DaoManager.getInstance();
+        daoManager.init(config);
 
-        DocumentManager documentManager = new DocumentManager("", companyData, Double.parseDouble(config.getProperties().get("vat").toString()));
+        DocumentManager documentManager = new DocumentManager(config.getProperties().getProperty("documents.folder"), companyData, Double.parseDouble(config.getProperties().get("vat").toString()));
         documentManager.generateDocuments(courseManager.getCalculatedPath(), client);
         //documentManager.generateDocuments(courseManager.getCalculatedPath(), null);
+        
+        for (Ticket ticket : daoManager.getTicketDao().selectTickets()) {
+            System.out.println(ticket);
+        }
     }
     
 }
