@@ -9,14 +9,14 @@ package biologicalparkticketsystem.controller;
  *
  * @author golds
  */
-public class CourseManagerException extends RuntimeException {
+public class MapManagerException extends RuntimeException {
 
     /**
      * Creates a new instance of <code>NewException</code> without detail
      * message.
      */
-    public CourseManagerException() {
-        super("an undefined exception has occurred on coursemanager class");
+    public MapManagerException() {
+        super("an undefined exception has occurred on mapmanager class");
     }
 
     /**
@@ -25,7 +25,7 @@ public class CourseManagerException extends RuntimeException {
      *
      * @param msg the detail message.
      */
-    public CourseManagerException(String msg) {
+    public MapManagerException(String msg) {
         super(msg);
     }
 }

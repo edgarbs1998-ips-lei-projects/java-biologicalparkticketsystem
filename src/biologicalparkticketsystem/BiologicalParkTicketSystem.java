@@ -1,10 +1,11 @@
 package biologicalparkticketsystem;
 
 import biologicalparkticketsystem.controller.ConfigManager;
-import biologicalparkticketsystem.model.Connection;
 import biologicalparkticketsystem.controller.CourseManager;
 import biologicalparkticketsystem.controller.DocumentManager;
-import biologicalparkticketsystem.model.CalculatedPath;
+import biologicalparkticketsystem.controller.MapManager;
+import biologicalparkticketsystem.model.Address;
+import biologicalparkticketsystem.model.Client;
 import biologicalparkticketsystem.model.PointOfInterest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -62,46 +63,47 @@ public class BiologicalParkTicketSystem extends Application {
 //        logger.getLoggerCourseCalculations().info("Teste2");
 //        logger.getLoggerCourseCalculations().fine("Teste4");
         
-//        CourseManager courseManager = new CourseManager();
-//        courseManager.loadCourseMapFile(config.getProperties().getProperty("mapFile"));
-//        
-//        System.out.println(courseManager.toString());
-//        
-//        PointOfInterest poiStart = courseManager.getPointOfInterestById(1);
-//        
-//        List<PointOfInterest> mustVisitPois = new ArrayList<>();
-//        PointOfInterest poi1 = courseManager.getPointOfInterestById(5);
-//        mustVisitPois.add(poi1);
-//        PointOfInterest poi2 = courseManager.getPointOfInterestById(8);
-//        mustVisitPois.add(poi2);
-//        PointOfInterest poi3 = courseManager.getPointOfInterestById(4);
-//        mustVisitPois.add(poi3);
-//        
-//        testMinimumCostPath(courseManager, CourseManager.Criteria.DISTANCE, poiStart, mustVisitPois, false);
-//        testMinimumCostPath(courseManager, CourseManager.Criteria.COST, poiStart, mustVisitPois, false);
-//        testMinimumCostPath(courseManager, CourseManager.Criteria.DISTANCE, poiStart, mustVisitPois, true);
-//        testMinimumCostPath(courseManager, CourseManager.Criteria.COST, poiStart, mustVisitPois, true);
-
-        try {
-            DocumentManager documentManager = new DocumentManager(config);
-            documentManager.generateTicket();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(BiologicalParkTicketSystem.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(BiologicalParkTicketSystem.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    private static void testMinimumCostPath(CourseManager courseManager,
-            CourseManager.Criteria criteria, 
-            PointOfInterest orig, List<PointOfInterest> mustVisitPois, boolean allowBike) {
+        MapManager mapManager = new MapManager(config.getProperties().getProperty("mapFile"));
+        System.out.println(mapManager .toString());
         
-        System.out.println( String.format("Best (%s) route between %s and %s (onBike: %s)", criteria, orig, mustVisitPois, allowBike));
-        CalculatedPath calculatedPath = courseManager.minimumCriteriaPath(criteria, allowBike, orig, mustVisitPois);
-        System.out.println( String.format("Total cost (%s) = %d", criteria.getUnit(), calculatedPath.getCost()));
-        System.out.println("Points of Interest: " + calculatedPath.getPointsOfInterest());
-        System.out.println("Connections: " + calculatedPath.getConnections());
-        System.out.println("");
+        CourseManager courseManager = new CourseManager(mapManager);
+        System.out.println(courseManager.toString());
+        
+        List<PointOfInterest> mustVisitPois = new ArrayList<>();
+        PointOfInterest poi1 = mapManager.getPointOfInterestById(5);
+        mustVisitPois.add(poi1);
+        PointOfInterest poi2 = mapManager.getPointOfInterestById(8);
+        mustVisitPois.add(poi2);
+        PointOfInterest poi3 = mapManager.getPointOfInterestById(4);
+        mustVisitPois.add(poi3);
+        
+//        courseManager.minimumCriteriaPath(CourseManager.Criteria.DISTANCE, false, mustVisitPois);
+//        System.out.println(courseManager.toString());
+//        courseManager.minimumCriteriaPath(CourseManager.Criteria.COST, false, mustVisitPois);
+//        System.out.println(courseManager.toString());
+//        courseManager.minimumCriteriaPath(CourseManager.Criteria.DISTANCE, true, mustVisitPois);
+//        System.out.println(courseManager.toString());
+        courseManager.minimumCriteriaPath(CourseManager.Criteria.COST, true, mustVisitPois);
+        System.out.println(courseManager.toString());
+        
+        Address companyAddress = new Address(
+                config.getProperties().get("company.address.adress").toString(),
+                config.getProperties().get("company.address.postal_code").toString(),
+                config.getProperties().get("company.address.location").toString(),
+                config.getProperties().get("company.address.country").toString()
+        );
+        Client companyData = new Client(
+                config.getProperties().get("company.name").toString(),
+                config.getProperties().get("company.nif").toString(),
+                companyAddress
+        );
+        
+        Address clientAddress = new Address("Est. da Charneca", "2665-506", "Venda do Pinheiro", "Portugal");
+        Client client = new Client("Edgar Santos", "267400292", clientAddress);
+
+        DocumentManager documentManager = new DocumentManager("", companyData, Double.parseDouble(config.getProperties().get("vat").toString()));
+        documentManager.generateDocuments(courseManager.getCalculatedPath(), client);
+        //documentManager.generateDocuments(courseManager.getCalculatedPath(), null);
     }
     
 }

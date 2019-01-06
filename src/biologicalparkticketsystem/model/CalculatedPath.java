@@ -5,6 +5,7 @@
  */
 package biologicalparkticketsystem.model;
 
+import biologicalparkticketsystem.controller.CourseManager.Criteria;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +15,32 @@ import java.util.List;
  */
 public class CalculatedPath {
     
+    private Criteria criteria;
+    private boolean navigability;
     private int cost;
-    private List<PointOfInterest> pointsOfInterest;
-    private List<Connection> connections;
+    private final List<PointOfInterest> pointsOfInterest;
+    private final List<Connection> connections;
     
     public CalculatedPath() {
         this.cost = Integer.MAX_VALUE;
         this.pointsOfInterest = new ArrayList<>();
         this.connections = new ArrayList<>();
+    }
+    
+    public Criteria getCriteria() {
+        return this.criteria;
+    }
+    
+    public void setCriteria(Criteria criteria) {
+        this.criteria = criteria;
+    }
+    
+    public boolean getNavigability() {
+        return this.navigability;
+    }
+    
+    public void setNavigability(boolean navigability) {
+        this.navigability = navigability;
     }
     
     public int getCost() {

@@ -3,22 +3,15 @@ package biologicalparkticketsystem.controller;
 import biologicalparkticketsystem.model.CalculatedDijkstra;
 import biologicalparkticketsystem.model.CalculatedPath;
 import biologicalparkticketsystem.model.Connection;
-import biologicalparkticketsystem.model.ConnectionBridge;
-import biologicalparkticketsystem.model.ConnectionPath;
 import biologicalparkticketsystem.model.PointOfInterest;
-import digraph.DiGraph;
 import digraph.IEdge;
 import digraph.IVertex;
-import digraph.InvalidVertexException;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 
 public class CourseManager {
@@ -35,273 +28,76 @@ public class CourseManager {
           * @return the type of unit that is used for cost and distance, by default is "Unknown"
           */
          public String getUnit() {
-            switch(this) {
+            switch (this) {
                 case COST: return "€";
                 case DISTANCE: return "Meters";
             }
             return "Unknown";
         }
+         
+         public String getName() {
+             switch (this) {
+                 case COST: return "Cost";
+                 case DISTANCE: return "Distance";
+             }
+             return "Unknown";
+         }
     };
     
-    private DiGraph<PointOfInterest, Connection> digraph;
+    private final MapManager mapManager;
     private CalculatedPath calculatedPath;
 
     /**
      * Course manager constructor
+     * @param mapManager
      */
-    public CourseManager() {
-        this.digraph = new DiGraph<>();
+    public CourseManager(MapManager mapManager) {
+        this.mapManager = mapManager;
+        this.calculatedPath = null;
     }
     
-    public DiGraph<PointOfInterest, Connection> getDigraph() {
-        return this.digraph;
-    }
-    
-    public void loadCourseMapFile(String path) {
-        try {
-            File file = new File(path);
-            Scanner scanner = new Scanner(file);
-            
-            Map<Integer, PointOfInterest> loadedPOIs = new HashMap<>(); // Used for performance optimization
-            
-            // Add POIs
-            while (!scanner.hasNextInt()) {
-                scanner.nextLine();
-            }
-            int numberPOIs = scanner.nextInt();
-            scanner.nextLine();
-            int countPOIs = 0;
-            while (countPOIs < numberPOIs && scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                String[] fields = line.split(", ");
-                if (fields.length != 2) {
-                    throw new Exception("Expected a POI with 2 fields while reading park map file");
-                }
-                PointOfInterest poi = new PointOfInterest(
-                        Integer.parseInt(fields[0]),
-                        fields[1]
-                );
-                addPointOfInterest(poi);
-                loadedPOIs.put(poi.getPoiId(), poi);
-                
-                ++countPOIs;
-            }
-            if (numberPOIs != countPOIs) {
-                throw new Exception("Expected " + numberPOIs + " POIs from park map file but found " + countPOIs);
-            }
-            
-            // Add connections
-            while (!scanner.hasNextInt()) {
-                scanner.nextLine();
-            }
-            int numberConnections = scanner.nextInt();
-            scanner.nextLine();
-            int countConnections = 0;
-            while (countConnections < numberConnections && scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                String[] fields = line.split(", ");
-                if (fields.length != 8) {
-                    throw new Exception("Expected a Connection with 8 fields while reading park map file");
-                }
-                Connection con = null;
-                switch (fields[1]) {
-                    case "ponte": 
-                        con = new ConnectionBridge(
-                            Integer.parseInt(fields[0]),
-                            fields[2],
-                            Integer.parseInt(fields[6]),
-                            Integer.parseInt(fields[7]),
-                            Boolean.parseBoolean(fields[5])
-                        );
-                        break;
-                        
-                    case "caminho":
-                        con = new ConnectionPath(
-                            Integer.parseInt(fields[0]),
-                            fields[2],
-                            Integer.parseInt(fields[6]),
-                            Integer.parseInt(fields[7]),
-                            Boolean.parseBoolean(fields[5])
-                        );
-                        break;
-                }
-                int startPoiId = Integer.parseInt(fields[3]);
-                int endPoiId = Integer.parseInt(fields[4]);
-                addConnection(loadedPOIs.get(startPoiId), loadedPOIs.get(endPoiId), con);
-                
-                ++countConnections;
-            }
-            if (numberConnections != countConnections) {
-                throw new Exception("Expected " + numberConnections + " Connections from park map file but found " + countConnections);
-            }
-        } catch (FileNotFoundException ex) {
-            throw new CourseManagerException("Specified park map file not found (" + ex.getMessage() + ")");
-        } catch (Exception ex) {
-            throw new CourseManagerException(ex.getMessage());
-        }
-    }
-    
-    public PointOfInterest getPointOfInterestById(int id) throws CourseManagerException {
-        IVertex<PointOfInterest> find = null;
-        
-        for (IVertex<PointOfInterest> v : digraph.vertices()) {
-            if (v.element().getPoiId() == id) {
-                find = v;
-                break;
-            }
-        }
-        
-        if(find == null) {
-            throw new CourseManagerException("Point of interest with id (" + id + ") does not exist");
-        }
-        
-        return find.element();
-    }
-    
-    private IVertex<PointOfInterest> checkPointOfInterest(PointOfInterest poi) throws CourseManagerException {
-        
-        if( poi == null) 
-            throw new CourseManagerException("Point of interest cannot be null");
-        
-        IVertex<PointOfInterest> find = null;
-        for (IVertex<PointOfInterest> v : digraph.vertices()) {
-            if( v.element().equals(poi)) { //equals was overriden in PointOfInterest!!
-                find = v;
-            }
-        }
-        
-        if( find == null) 
-            throw new CourseManagerException("Point of interest with id (" + poi.getPoiId() + ") does not exist");
-        
-        return find;
-    }
-    
-    /**
-     * Adds a point of interest
-     * @param poi
-     * @throws CourseManagerException
-     */
-    public void addPointOfInterest(PointOfInterest poi) throws CourseManagerException{
-        if( poi == null ) throw new CourseManagerException("Point of interest cannot be null");
-        
-        try {
-            digraph.insertVertex(poi);
-        } catch (InvalidVertexException e) {
-            throw new CourseManagerException("Point of interest with id (" + poi.getPoiId() + ") already exists");
-            
-        }
-    }
-    
-    /**
-     * Method to add a connection
-     * @param poi1
-     * @param poi2
-     * @param connection
-     * @throws CourseManagerException
-     */
-    public void addConnection(PointOfInterest poi1, PointOfInterest poi2, Connection connection) throws CourseManagerException{
-        
-        if( connection == null) 
-            throw new CourseManagerException("Connection is null");
-        
-        IVertex<PointOfInterest> p1 = checkPointOfInterest(poi1);
-        IVertex<PointOfInterest> p2 = checkPointOfInterest(poi2);
-        
-        try {
-            digraph.insertEdge(p1, p2, connection);
-            if (connection instanceof ConnectionPath) {
-                digraph.insertEdge(p2, p1, connection);
-            }
-        } catch (InvalidVertexException e) {
-            throw new CourseManagerException("The connection (" + connection.getConnectionName() + ") already exists");
-        }
-    }
-    
-    /**
-     * Get a connection between 
-     * @param poi1
-     * @param poi2
-     * @return
-     * @throws CourseManagerException
-     */
-    public List<Connection> getConnectionsBetween(PointOfInterest poi1, PointOfInterest poi2) throws CourseManagerException {
-        
-        List<Connection> connectionList = new ArrayList<>();
-        
-        IVertex<PointOfInterest> p1 = checkPointOfInterest(poi1);
-        IVertex<PointOfInterest> p2 = checkPointOfInterest(poi2);
-        
-        if (digraph.areAdjacent(p1, p2)) {
-            for (IEdge<Connection, PointOfInterest> e1 : digraph.accedentEdges(p1)) {
-                for (IEdge<Connection, PointOfInterest> e2 : digraph.incidentEdges(p2)) {
-                    if (e1 == e2) {
-                        connectionList.add(e1.element());
-                        break;
-                    }
-                }
-            }
-        }
-        
-        return connectionList;
-    }
-    
-    @Override
-    public String toString() {
-        String returnString = "COURSE MANAGER (" + digraph.numVertices() + " Points of Interest | " + digraph.numEdges() + " Connections)\n";
-        for(IVertex<PointOfInterest> p1 : digraph.vertices()){            
-            for(IVertex<PointOfInterest> p2 : digraph.vertices()){
-                if(p1 == p2){
-                    continue;
-                }
-                
-                returnString += "\t" + p1.element().toString() + " TO " + p2.element().toString() + "\n";
-
-                List<Connection> connections = getConnectionsBetween(p1.element(), p2.element());
-                if(connections.isEmpty()) {
-                    returnString += "\t\t(no connections)\n";
-                } else {
-                    for (Connection connection : connections) {
-                        returnString += "\t\t" + connection + "\n";
-                    }
-                }
-                
-                returnString += "\n";
-            }
-        }
-        
-        return returnString;
+    public CalculatedPath getCalculatedPath() {
+        return this.calculatedPath;
     }
     
     /**
      * Calculates the minimum cost path
      * @param criteria
-     * @param allowBike
-     * @param start
+     * @param navigability
      * @param mustVisitPois
-     * @return the cost of the lowest cost path
-     * @throws CourseManagerException
+     * @return success
      */
-    public CalculatedPath minimumCriteriaPath(Criteria criteria,
-            boolean allowBike,
-            PointOfInterest start,
-            List<PointOfInterest> mustVisitPois)
-        throws CourseManagerException {
+    public boolean minimumCriteriaPath(Criteria criteria,
+            boolean navigability,
+            List<PointOfInterest> mustVisitPois) {
         
-        this.calculatedPath = new CalculatedPath();
-        
-        IVertex<PointOfInterest> startPoi = checkPointOfInterest(start);
-
-        Map<IVertex<PointOfInterest>, CalculatedDijkstra> calculatedDijkstras = new HashMap<>();
-        
-        dijkstraAlgorithm(criteria, allowBike, startPoi, calculatedDijkstras);
-        for (PointOfInterest poi : mustVisitPois) {
-            IVertex<PointOfInterest> vertexPoi = checkPointOfInterest(poi);
-            dijkstraAlgorithm(criteria, allowBike, vertexPoi, calculatedDijkstras);
+        if (mustVisitPois.isEmpty()) {
+            throw new CourseManagerException("To generate a path a minimum of one point of interest must be selected");
         }
         
-        heapsAlgorithm(mustVisitPois.size(), mustVisitPois, startPoi, calculatedDijkstras);
+        try {
+            this.calculatedPath = new CalculatedPath();
+
+            IVertex<PointOfInterest> startPoi = this.mapManager.checkPointOfInterest(this.mapManager.getStartPoint());
+
+            Map<IVertex<PointOfInterest>, CalculatedDijkstra> calculatedDijkstras = new HashMap<>();
+
+            dijkstraAlgorithm(criteria, navigability, startPoi, calculatedDijkstras);
+            for (PointOfInterest poi : mustVisitPois) {
+                IVertex<PointOfInterest> vertexPoi = this.mapManager.checkPointOfInterest(poi);
+                dijkstraAlgorithm(criteria, navigability, vertexPoi, calculatedDijkstras);
+            }
+
+            heapsAlgorithm(mustVisitPois.size(), mustVisitPois, startPoi, calculatedDijkstras);
+
+            this.calculatedPath.setCriteria(criteria);
+            this.calculatedPath.setNavigability(navigability);
+        } catch (MapManagerException ex) {
+            this.calculatedPath = null;
+            return false;
+        }
         
-        return this.calculatedPath;
+        return true;
     }
     
     private void heapsAlgorithm(int n, List<PointOfInterest> mustVisitPois,
@@ -335,7 +131,7 @@ public class CourseManager {
         IVertex<PointOfInterest> origin = startPoi;
         IVertex<PointOfInterest> destination;
         for (PointOfInterest poi : mustVisitPois) {
-            destination = checkPointOfInterest(poi);
+            destination = this.mapManager.checkPointOfInterest(poi);
             cost += getMinimumPathFromTwoPOIs(origin, destination, calculatedDijkstras, tempCalculatedPath.getPointsOfInterest(), tempCalculatedPath.getConnections());
             origin = destination;
         }
@@ -353,8 +149,7 @@ public class CourseManager {
             IVertex<PointOfInterest> destination,
             Map<IVertex<PointOfInterest>, CalculatedDijkstra> calculatedDijkstras,
             List<PointOfInterest> pois,
-            List<Connection> connections)
-        throws CourseManagerException {
+            List<Connection> connections) {
         
         List<PointOfInterest> tempPois = new ArrayList<>();
         List<Connection> tempConnections = new ArrayList<>();
@@ -385,7 +180,7 @@ public class CourseManager {
      * @param edges
      */
     private void dijkstraAlgorithm(Criteria criteria,
-            boolean allowBike,
+            boolean navigability,
             IVertex<PointOfInterest> orig,
             Map<IVertex<PointOfInterest>, CalculatedDijkstra> calculatedDijkstras) {
         
@@ -396,7 +191,7 @@ public class CourseManager {
         Set<IVertex<PointOfInterest>> visited = new HashSet<>();
         Set<IVertex<PointOfInterest>> unvisited = new HashSet<>();
         
-        for (IVertex<PointOfInterest> vertex : digraph.vertices()) {
+        for (IVertex<PointOfInterest> vertex : this.mapManager.getDiGraph().vertices()) {
             costs.put(vertex, Double.MAX_VALUE);
             predecessors.put(vertex, null);
             edges.put(vertex, null);
@@ -407,9 +202,9 @@ public class CourseManager {
         while (!unvisited.isEmpty()) {
             IVertex<PointOfInterest> lowerCostVertex = findLowerCostVertex(unvisited, costs);
             unvisited.remove(lowerCostVertex);
-            for (IEdge<Connection, PointOfInterest> edge : digraph.accedentEdges(lowerCostVertex)) {
-                if (allowBike == false || (allowBike == true && edge.element().getConnectionNavigability() == allowBike)) {
-                    IVertex<PointOfInterest> opposite = digraph.opposite(lowerCostVertex, edge);
+            for (IEdge<Connection, PointOfInterest> edge : this.mapManager.getDiGraph().accedentEdges(lowerCostVertex)) {
+                if (navigability == false || (navigability == true && edge.element().getConnectionNavigability() == navigability)) {
+                    IVertex<PointOfInterest> opposite = this.mapManager.getDiGraph().opposite(lowerCostVertex, edge);
                     if (!visited.contains(opposite)) {
                         double edgeWeight = 0.0;
                         switch (criteria) {
@@ -455,6 +250,32 @@ public class CourseManager {
         }
         
         return minCostVertex;
+    }
+    
+    @Override
+    public String toString() {
+        String returnString = "COURSE MANAGER\n";
+        
+        if (this.calculatedPath == null) {
+            returnString += "\t(the path has not yet been calculated)\n";
+        } else {
+            returnString += "\tBest (" + this.calculatedPath.getCriteria() + ") path for the selected points of interest (onBike: " + this.calculatedPath.getNavigability() + ")\n";
+            returnString += "\tTotal cost (" + this.calculatedPath.getCriteria().getUnit() + ") = " + this.calculatedPath.getCost() + "\n";
+            
+            returnString += "\tPoints of Interest:\n";
+            for (PointOfInterest pointOfInterest : this.calculatedPath.getPointsOfInterest()) {
+                returnString += "\t\t" + pointOfInterest + "\n";
+            }
+            
+            returnString += "\tConnections:\n";
+            for (Connection connection : this.calculatedPath.getConnections()) {
+                returnString += "\t\t" + connection + "\n";
+            }
+        }
+        
+        returnString += "\n";
+        
+        return returnString;
     }
     
 }
