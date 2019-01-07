@@ -6,16 +6,29 @@ import biologicalparkticketsystem.controller.DaoManager;
 import biologicalparkticketsystem.controller.DocumentManager;
 import biologicalparkticketsystem.controller.MapManager;
 import biologicalparkticketsystem.model.Client;
+import biologicalparkticketsystem.model.Connection;
 import biologicalparkticketsystem.model.Invoice;
 import biologicalparkticketsystem.model.PointOfInterest;
+import biologicalparkticketsystem.model.Ticket;
+import biologicalparkticketsystem.view.BiologicalParkTicketSystemUI;
+import graphview.*;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -26,22 +39,85 @@ public class BiologicalParkTicketSystem extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
+        /*//test digraph
+        ConfigManager config = ConfigManager.getInstance();
+        MapManager mapManager = new MapManager(config.getProperties().getProperty("mapFile"));
+        
+        
+        VBox graphViewer = new VBox(); // graphviewer container
+        VertexPlacementStrategy strategy = new CircularSortedPlacementStrategy();
+        
+        GraphPanel<PointOfInterest, Connection> graphView = new GraphPanel<>(mapManager.getDiGraph(), strategy); //SHOULD WORK DONT KNOW WHY IT DOESNT
+        graphViewer.getChildren().add(graphView);
+        graphViewer.setPadding(new Insets(20));
+        
+        //right menu
+        VBox rightMenu = new VBox();
+        final ToggleGroup group = new ToggleGroup();
+
+        RadioButton rb1 = new RadioButton("Foot");
+        rb1.setToggleGroup(group);
+        rb1.setSelected(true);
+        RadioButton rb2 = new RadioButton("Bicycle");
+        rb2.setToggleGroup(group);
+        final ComboBox numberComboBox = new ComboBox();
+        numberComboBox.setValue("Number of people");
+        numberComboBox.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30);
+        rightMenu.getChildren().addAll(rb1, rb2, numberComboBox);
+        rightMenu.setSpacing(10);
+
+        // bottom respectively "button area"
+        HBox bottomMenu = new HBox();
+        
+        //Instanciate buttons
+        Button payBtn = new Button("Pay");
+        Button calculateBtn = new Button("Calculate");
+        ObservableList<String> options = FXCollections.observableArrayList("Shortest","Cheapest","Most visited");
+        final ComboBox PathComboBox = new ComboBox(options);
+        PathComboBox.setValue("Path");
+        
+        //set button handlers
+        calculateBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+          public void handle(ActionEvent event) {
+            //SHOW WINDOW OF CALCULATED STATISTICS
             
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
+            Stage statisticsWindow = new Stage();
+            statisticsWindow.setTitle("Statisitcs");
+            //stage.setScene(new Scene(root, 450, 450));
+            statisticsWindow.show();
+          }
         });
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        payBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+          public void handle(ActionEvent event) {
+            //DO WINDOW
+            System.out.println("Receipt window");
+          }
+        });
         
-        Scene scene = new Scene(root, 300, 250);
+        //Add buttons to menu
+        bottomMenu.getChildren().addAll(PathComboBox, calculateBtn, payBtn);
         
-        primaryStage.setTitle("Hello World!");
+        //align menu
+        bottomMenu.setAlignment(Pos.CENTER_LEFT);
+        */
+        
+        BiologicalParkTicketSystemUI view = new BiologicalParkTicketSystemUI();
+        
+        // root
+        BorderPane root = new BorderPane();
+        root.setCenter(view.getGraphViewer());
+        root.setBottom(view.getbottomMenu());
+        root.setRight(view.getRightMenu());
+        root.setPadding(new Insets(20));
+        
+        //scene
+        Scene scene = new Scene(root, 800, 600);
+        
+        //stage build
+        primaryStage.setTitle("Biological Park");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -50,7 +126,7 @@ public class BiologicalParkTicketSystem extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //launch(args);
+        launch(args);
         
         ConfigManager config = ConfigManager.getInstance();
         
