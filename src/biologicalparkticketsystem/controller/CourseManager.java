@@ -92,6 +92,7 @@ public class CourseManager {
 
             this.calculatedPath.setCriteria(criteria);
             this.calculatedPath.setNavigability(navigability);
+            this.calculatedPath.setMustVisit(mustVisitPois);
         } catch (MapManagerException ex) {
             this.calculatedPath = null;
             return false;
@@ -160,6 +161,10 @@ public class CourseManager {
         
         while (destination != origin) {
             tempPois.add(0, destination.element());
+            if (!calculatedDijkstra.getEdges().containsKey(destination)) {
+                // TODO Return an error message
+                throw new CourseManagerException("It is not possible to calculate a path for the selected points of interest");
+            }
             tempConnections.add(0, calculatedDijkstra.getEdges().get(destination).element());
             destination = calculatedDijkstra.getPredecessors().get(destination);
         }

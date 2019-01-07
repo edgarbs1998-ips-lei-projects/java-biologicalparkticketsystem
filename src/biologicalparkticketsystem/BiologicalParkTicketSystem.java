@@ -6,8 +6,8 @@ import biologicalparkticketsystem.controller.DaoManager;
 import biologicalparkticketsystem.controller.DocumentManager;
 import biologicalparkticketsystem.controller.MapManager;
 import biologicalparkticketsystem.model.Client;
+import biologicalparkticketsystem.model.Invoice;
 import biologicalparkticketsystem.model.PointOfInterest;
-import biologicalparkticketsystem.model.Ticket;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
@@ -60,19 +60,23 @@ public class BiologicalParkTicketSystem extends Application {
 //        logger.getLoggerCourseCalculations().info("Teste2");
 //        logger.getLoggerCourseCalculations().fine("Teste4");
         
-        MapManager mapManager = new MapManager(config.getProperties().getProperty("mapFile"));
+        MapManager mapManager = new MapManager(config.getProperties().getProperty("map.file"));
         System.out.println(mapManager .toString());
         
         CourseManager courseManager = new CourseManager(mapManager);
         System.out.println(courseManager.toString());
         
         List<PointOfInterest> mustVisitPois = new ArrayList<>();
-        PointOfInterest poi1 = mapManager.getPointOfInterestById(5);
-        mustVisitPois.add(poi1);
-        PointOfInterest poi2 = mapManager.getPointOfInterestById(8);
-        mustVisitPois.add(poi2);
-        PointOfInterest poi3 = mapManager.getPointOfInterestById(4);
-        mustVisitPois.add(poi3);
+        PointOfInterest poi5 = mapManager.getPointOfInterestById(5);
+        mustVisitPois.add(poi5);
+        PointOfInterest poi8 = mapManager.getPointOfInterestById(8);
+        mustVisitPois.add(poi8);
+        PointOfInterest poi4 = mapManager.getPointOfInterestById(4);
+        mustVisitPois.add(poi4);
+//        PointOfInterest poi6 = mapManager.getPointOfInterestById(6);
+//        mustVisitPois.add(poi6);
+        PointOfInterest poi7 = mapManager.getPointOfInterestById(7);
+        mustVisitPois.add(poi7);
         
 //        courseManager.minimumCriteriaPath(CourseManager.Criteria.DISTANCE, false, mustVisitPois);
 //        System.out.println(courseManager.toString());
@@ -106,8 +110,22 @@ public class BiologicalParkTicketSystem extends Application {
         documentManager.generateDocuments(courseManager.getCalculatedPath(), client);
         //documentManager.generateDocuments(courseManager.getCalculatedPath(), null);
         
-        for (Ticket ticket : daoManager.getTicketDao().selectTickets()) {
-            System.out.println(ticket);
+//        for (Ticket ticket : daoManager.getTicketDao().selectTickets()) {
+//            System.out.println(ticket);
+//        }
+        
+//        for (Invoice invoice : daoManager.getInvoiceDao().selectInvoices()) {
+//            System.out.println(invoice);
+//        }
+
+        System.out.println("Sold Bike Tickets: " + daoManager.getStatisticsDao().getSoldBikeTickets());
+        System.out.println("Sold Foot Tickets: " + daoManager.getStatisticsDao().getSoldFootTickets());
+        System.out.println("Sold Tickets Price Average: " + daoManager.getStatisticsDao().getSoldTicketsPriceAverage());
+        System.out.println("Top 10 Visited Pois:");
+        int count = 0;
+        for (int poiId : daoManager.getStatisticsDao().getTop10VisitedPois().keySet()) {
+            PointOfInterest poi = mapManager.getPointOfInterestById(poiId);
+            System.out.println("\t" + ++count + " - Name: " + poi.getPoiName() + "; Visits: " + daoManager.getStatisticsDao().getTop10VisitedPois().get(poiId));
         }
     }
     

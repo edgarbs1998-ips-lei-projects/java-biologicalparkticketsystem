@@ -3,6 +3,7 @@ package biologicalparkticketsystem.controller;
 import biologicalparkticketsystem.model.CalculatedPath;
 import biologicalparkticketsystem.model.Client;
 import biologicalparkticketsystem.model.Connection;
+import biologicalparkticketsystem.model.Invoice;
 import biologicalparkticketsystem.model.PointOfInterest;
 import biologicalparkticketsystem.model.Ticket;
 import com.itextpdf.io.font.constants.StandardFonts;
@@ -39,6 +40,7 @@ import java.util.logging.Logger;
 public class DocumentManager {
     
     private final static int INVOICE_DETAILS_CELL_HEIGHT = 14;
+    private final static String CURRENCY = "EUR";
     
     private final String documentPath;
     private final Client companyData;
@@ -122,7 +124,7 @@ public class DocumentManager {
             cell.setWidth(UnitValue.createPercentValue(15));
             table.addCell(cell);
             
-            paragraph = new Paragraph((calculatedPath.getNavigability() ? "On Bike" : "On Foot" ));
+            paragraph = new Paragraph((calculatedPath.getNavigability() == true ? "On Bike" : "On Foot" ));
             paragraph.setFont(fontRegular).setFontSize(11);
             cell = new Cell().add(paragraph);
             cell.setBorder(Border.NO_BORDER);
@@ -160,9 +162,19 @@ public class DocumentManager {
             cell.setWidth(UnitValue.createPercentValue(35));
             table.addCell(cell);
 
-            // Details tablle - Fill remaining cells
-            cell = new Cell(1, 2);
+            // Details table - Selected POIs
+            paragraph = new Paragraph("Selected POIs:");
+            paragraph.setFont(fontBold).setFontSize(11);
+            cell = new Cell().add(paragraph);
             cell.setBorder(Border.NO_BORDER);
+            cell.setWidth(UnitValue.createPercentValue(15));
+            table.addCell(cell);
+            
+            paragraph = new Paragraph(Integer.toString(calculatedPath.getMustVisit().size()));
+            paragraph.setFont(fontRegular).setFontSize(11);
+            cell = new Cell().add(paragraph);
+            cell.setBorder(Border.NO_BORDER);
+            cell.setWidth(UnitValue.createPercentValue(35));
             table.addCell(cell);
             
             document.add(table);
@@ -341,11 +353,18 @@ public class DocumentManager {
         ticket.setTotalCost(totalCost);
         
         DaoManager.getInstance().getTicketDao().insertTicket(ticket);
+        DaoManager.getInstance().getStatisticsDao().insertTicket(ticket, calculatedPath);
     }
     
     private void generateInvoice(String uniqueId, CalculatedPath calculatedPath, Client client) throws FileNotFoundException, IOException {
+        Invoice invoice = new Invoice();
+        invoice.setUid(uniqueId);
+        invoice.setClient(client);
+        invoice.setItems(new ArrayList<>());
         
         double totalAmmount = 0; // Total ammount
+        double baseAmmount; // Base ammount
+        double taxAmmount; // Tax ammount
         
         Date now = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
@@ -379,8 +398,33 @@ public class DocumentManager {
             // Details table
             table = new Table(2);
             table.setWidth(UnitValue.createPercentValue(100));
+            
+            // Details table - Issue date
+            paragraph = new Paragraph("Issue date:");
+            paragraph.setFont(fontBold).setFontSize(11);
+            cell = new Cell().add(paragraph);
+            cell.setBorder(Border.NO_BORDER);
+            cell.setWidth(UnitValue.createPercentValue(15));
+            table.addCell(cell);
+            
+            simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            paragraph = new Paragraph(simpleDateFormat.format(now));
+            paragraph.setFont(fontRegular).setFontSize(11);
+            cell = new Cell().add(paragraph);
+            cell.setBorder(Border.NO_BORDER);
+            cell.setWidth(UnitValue.createPercentValue(85));
+            table.addCell(cell);
+            
+            document.add(table);
+            
+            // Break line
+            document.add(new Paragraph().setMarginBottom(20));
+            
+            // FromTo table
+            table = new Table(2);
+            table.setWidth(UnitValue.createPercentValue(100));
 
-            // Details table - Headers
+            // FromTo table - Headers
             paragraph = new Paragraph("From:");
             paragraph.setFont(fontBold).setFontSize(11);
             cell = new Cell().add(paragraph);
@@ -395,7 +439,7 @@ public class DocumentManager {
             cell.setWidth(UnitValue.createPercentValue(50));
             table.addHeaderCell(cell);
             
-            // Details table - Nif
+            // FromTo table - Nif
             paragraph = new Paragraph("NIF: " + this.companyData.getNif());
             paragraph.setFont(fontRegular).setFontSize(11);
             cell = new Cell().add(paragraph);
@@ -410,7 +454,7 @@ public class DocumentManager {
             cell.setHeight(24);
             table.addCell(cell);
             
-            // Details table - Name
+            // FromTo table - Name
             paragraph = new Paragraph(this.companyData.getName());
             paragraph.setFont(fontRegular).setFontSize(11);
             cell = new Cell().add(paragraph);
@@ -425,7 +469,7 @@ public class DocumentManager {
             cell.setHeight(INVOICE_DETAILS_CELL_HEIGHT);
             table.addCell(cell);
             
-            // Details table - Address Address
+            // FromTo table - Address Address
             paragraph = new Paragraph(this.companyData.getAddress().getAddress());
             paragraph.setFont(fontRegular).setFontSize(11);
             cell = new Cell().add(paragraph);
@@ -440,7 +484,7 @@ public class DocumentManager {
             cell.setHeight(INVOICE_DETAILS_CELL_HEIGHT);
             table.addCell(cell);
             
-            // Details table - Address Postal Code
+            // FromTo table - Address Postal Code
             paragraph = new Paragraph(this.companyData.getAddress().getPostalCode());
             paragraph.setFont(fontRegular).setFontSize(11);
             cell = new Cell().add(paragraph);
@@ -455,7 +499,7 @@ public class DocumentManager {
             cell.setHeight(INVOICE_DETAILS_CELL_HEIGHT);
             table.addCell(cell);
             
-            // Details table - Address Location
+            // FromTo table - Address Location
             paragraph = new Paragraph(this.companyData.getAddress().getLocation());
             paragraph.setFont(fontRegular).setFontSize(11);
             cell = new Cell().add(paragraph);
@@ -470,7 +514,7 @@ public class DocumentManager {
             cell.setHeight(INVOICE_DETAILS_CELL_HEIGHT);
             table.addCell(cell);
             
-            // Details table - Address Country
+            // FromTo table - Address Country
             paragraph = new Paragraph(this.companyData.getAddress().getCountry());
             paragraph.setFont(fontRegular).setFontSize(11);
             cell = new Cell().add(paragraph);
@@ -583,6 +627,16 @@ public class DocumentManager {
                 cell = new Cell().add(paragraph);
                 cell.setTextAlignment(TextAlignment.RIGHT);
                 table.addCell(cell);
+                
+                // Save on invoice item
+                Invoice.Item invoiceItem = invoice.new Item();
+                invoiceItem.setItem(connections.get(0).getConnectionName());
+                invoiceItem.setPrice(basePrice);
+                invoiceItem.setQuantity(connections.size());
+                invoiceItem.setSubtotal(basePrice * connections.size());
+                invoiceItem.setVat(this.vat);
+                invoiceItem.setTotal(totalPrice);
+                invoice.getItems().add(invoiceItem);
             }
             
             document.add(table);
@@ -638,13 +692,15 @@ public class DocumentManager {
             cell.setTextAlignment(TextAlignment.RIGHT);
             table.addCell(cell);
             
-            paragraph = new Paragraph(Double.toString(totalAmmount * (100.0 - this.vat) / 100.0));
+            baseAmmount = totalAmmount * (100.0 - this.vat) / 100.0;
+            paragraph = new Paragraph(Double.toString(baseAmmount));
             paragraph.setFont(fontRegular).setFontSize(11);
             cell = new Cell().add(paragraph);
             cell.setTextAlignment(TextAlignment.RIGHT);
             table.addCell(cell);
 
-            paragraph = new Paragraph(Double.toString(totalAmmount * this.vat / 100.0));
+            taxAmmount = totalAmmount * this.vat / 100.0;
+            paragraph = new Paragraph(Double.toString(taxAmmount));
             paragraph.setFont(fontRegular).setFontSize(11);
             cell = new Cell().add(paragraph);
             cell.setTextAlignment(TextAlignment.RIGHT);
@@ -656,13 +712,22 @@ public class DocumentManager {
             cell.setTextAlignment(TextAlignment.RIGHT);
             table.addCell(cell);
 
-            paragraph = new Paragraph("EUR");
+            paragraph = new Paragraph(CURRENCY);
             paragraph.setFont(fontRegular).setFontSize(11);
             cell = new Cell().add(paragraph);
             table.addCell(cell);
             
             document.add(table);
         }
+        
+        invoice.setIssueDate(simpleDateFormat.format(now));
+        invoice.setVat(this.vat);
+        invoice.setBaseAmmount(baseAmmount);
+        invoice.setTaxAmmount(taxAmmount);
+        invoice.setTotal(totalAmmount);
+        invoice.setCurrency(CURRENCY);
+        
+        DaoManager.getInstance().getInvoiceDao().insertInvoice(invoice);
     }
     
     private class CustomDottedLine extends DottedLine {

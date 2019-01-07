@@ -21,13 +21,13 @@ import java.util.logging.Logger;
  *
  * @author golds
  */
-public class TicketDAOSerialization implements ITicketDAO {
+public class InvoiceDAOSerialization implements IInvoiceDAO {
     
     private String basePath;
-    private HashSet<Ticket> list;
-    private final static String FILENAME = "tickets.dat";
+    private HashSet<Invoice> list;
+    private final static String FILENAME = "invoices.dat";
     
-    public TicketDAOSerialization (String basePath) {
+    public InvoiceDAOSerialization (String basePath) {
         this.basePath = basePath;
         
         // Create the path folder if it does not exists
@@ -44,7 +44,7 @@ public class TicketDAOSerialization implements ITicketDAO {
         try {
             FileInputStream fileIn = new FileInputStream(this.basePath + FILENAME);
             ObjectInputStream input = new ObjectInputStream(fileIn);
-            this.list = (HashSet<Ticket>) input.readObject();
+            this.list = (HashSet<Invoice>) input.readObject();
             input.close();
             fileIn.close();
         } catch (IOException ex) {
@@ -64,35 +64,35 @@ public class TicketDAOSerialization implements ITicketDAO {
             fileOut.close();
         } catch (FileNotFoundException ex) {
             // TODO
-            Logger.getLogger(TicketDAOSerialization.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InvoiceDAOSerialization.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             // TODO
-            Logger.getLogger(TicketDAOSerialization.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InvoiceDAOSerialization.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     @Override
-    public boolean insertTicket (Ticket ticket) {
-        if (this.list.contains(ticket)) {
+    public boolean insertInvoice (Invoice invoice) {
+        if (this.list.contains(invoice)) {
             return false;
         }
-        this.list.add(ticket);
+        this.list.add(invoice);
         saveAll();
         return true;
     }
     
     @Override
-    public Ticket findTicket(String uid) {
-        for (Ticket ticket : this.list) {
-            if (ticket.getUid().equals(uid)) {
-                return ticket;
+    public Invoice findInvoice(String uid) {
+        for (Invoice invoice : this.list) {
+            if (invoice.getUid().equals(uid)) {
+                return invoice;
             }
         }
         return null;
     }
     
     @Override
-    public Collection<Ticket> selectTickets() {
+    public Collection<Invoice> selectInvoices() {
         return this.list;
     }
     

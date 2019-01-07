@@ -20,11 +20,13 @@ public class CalculatedPath {
     private int cost;
     private final List<PointOfInterest> pointsOfInterest;
     private final List<Connection> connections;
+    private List<PointOfInterest> mustVisit;
     
     public CalculatedPath() {
         this.cost = Integer.MAX_VALUE;
         this.pointsOfInterest = new ArrayList<>();
         this.connections = new ArrayList<>();
+        this.mustVisit = new ArrayList<>();
     }
     
     public Criteria getCriteria() {
@@ -57,6 +59,14 @@ public class CalculatedPath {
     
     public List<Connection> getConnections() {
         return this.connections;
+    }
+    
+    public List<PointOfInterest> getMustVisit() {
+        return this.mustVisit;
+    }
+    
+    public void setMustVisit(List<PointOfInterest> mustVisit) {
+        this.mustVisit = mustVisit;
     }
     
 }

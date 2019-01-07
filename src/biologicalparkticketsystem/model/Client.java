@@ -5,11 +5,13 @@
  */
 package biologicalparkticketsystem.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author golds
  */
-public class Client {
+public class Client implements Serializable {
     
     private String name;
     private String nif;
@@ -51,12 +53,21 @@ public class Client {
         this.address = address;
     }
     
-    public class Address {
+    @Override
+    public String toString() {
+        return "Client {" + this.name + "}\n\tnif="
+            + this.nif + "\n\taddress="
+            + this.address + "\n}";
+    }
+    
+    public class Address implements Serializable {
 
         private String address;
         private String postalCode;
         private String location;
         private String country;
+        
+        public Address() { }
 
         public Address(String address, String postalCode, String location, String country) {
             this.address = address;
@@ -95,6 +106,14 @@ public class Client {
 
         public void setCountry(String country) {
             this.country = country;
+        }
+        
+        @Override
+        public String toString() {
+            return "Address {" + this.postalCode + "}\n\taddress="
+                + this.address + "\n\tlocation="
+                + this.location + "\n\tcountry="
+                + this.country + "\n}";
         }
 
     }
