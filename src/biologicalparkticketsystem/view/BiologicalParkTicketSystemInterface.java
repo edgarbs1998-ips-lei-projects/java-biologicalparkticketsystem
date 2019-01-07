@@ -5,6 +5,9 @@
  */
 package biologicalparkticketsystem.view;
 
+import biologicalparkticketsystem.model.Connection;
+import biologicalparkticketsystem.model.PointOfInterest;
+import graphview.GraphPanel;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -15,7 +18,7 @@ import javafx.scene.layout.VBox;
 public interface BiologicalParkTicketSystemInterface {
     
     //get graph viewer
-    public VBox getGraphViewer();
+    public GraphPanel<PointOfInterest, Connection> getGraphView();
     
     //get right menu
     public VBox getRightMenu();

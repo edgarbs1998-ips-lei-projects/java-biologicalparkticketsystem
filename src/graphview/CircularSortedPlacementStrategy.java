@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import digraph.*;
+import digraph.IVertex;
 
 /**
  * Strategy that places the vertices within a circle, guaranteeing that the vertices
@@ -40,13 +40,13 @@ import digraph.*;
 public class CircularSortedPlacementStrategy extends CircularPlacementStrategy {
 
     @Override
-    protected <T> Collection<Vertex<T>> sort(Map<Vertex<T>, GraphVertex> map) {
-        List<Vertex<T>> list = new ArrayList<>();
+    protected <T> Collection<IVertex<T>> sort(Map<IVertex<T>, GraphVertex> map) {
+        List<IVertex<T>> list = new ArrayList<>();
         list.addAll(map.keySet());
         
-        Collections.sort(list, new Comparator<Vertex<T>>() {
+        Collections.sort(list, new Comparator<IVertex<T>>() {
             @Override
-            public int compare(Vertex<T> t, Vertex<T> t1) {
+            public int compare(IVertex<T> t, IVertex<T> t1) {
                 return t.element().toString().compareToIgnoreCase(t1.element().toString());
             }
         });

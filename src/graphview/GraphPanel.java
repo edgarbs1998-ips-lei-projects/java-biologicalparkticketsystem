@@ -40,7 +40,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
-import digraph.*;
+import digraph.IEdge;
+import digraph.DiGraph;
+import digraph.IVertex;
 
 /**
  * JavaFX pane that is capable of plotting a Graph ADT.
@@ -81,8 +83,8 @@ public class GraphPanel<V, E> extends Pane {
     
     private final DiGraph<V, E> theGraph;
     private final VertexPlacementStrategy placementStrategy;
-    private Map<Vertex<V>, GraphVertex> graphVertexMap;
-    private Map<Edge<E, V>, GraphEdge> graphEdgeMap;
+    private Map<IVertex<V>, GraphVertex> graphVertexMap;
+    private Map<IEdge<E, V>, GraphEdge> graphEdgeMap;
 
     public GraphPanel(DiGraph<V, E> theGraph, VertexPlacementStrategy placementStrategy) {
         if (theGraph == null) {
@@ -105,13 +107,13 @@ public class GraphPanel<V, E> extends Pane {
      */
     public void resetColorsToDefault() {
 
-        for (Vertex<V> vertex : graphVertexMap.keySet()) {
+        for (IVertex<V> vertex : graphVertexMap.keySet()) {
             GraphVertex graphVertex = graphVertexMap.get(vertex);
             graphVertex.setFill(GRAPH_VERTEX_FILL);
             graphVertex.setStroke(GRAPH_VERTEX_STROKE);
         }
 
-        for (Edge<E, V> edge : graphEdgeMap.keySet()) {
+        for (IEdge<E, V> edge : graphEdgeMap.keySet()) {
             GraphEdge graphEdge = graphEdgeMap.get(edge);
             graphEdge.setFill(GRAPH_EDGE_COLOR);
         }
@@ -126,7 +128,7 @@ public class GraphPanel<V, E> extends Pane {
      * @param stroke color for the outline of the vertex shape
      * @return true if vertex was found and color changed; false otherwise.
      */
-    public boolean setVertexColor(Vertex<V> v, Color fill, Color stroke) {
+    public boolean setVertexColor(IVertex<V> v, Color fill, Color stroke) {
         GraphVertex graphVertex = graphVertexMap.get(v);
         if (graphVertex == null) {
             return false;
@@ -145,7 +147,7 @@ public class GraphPanel<V, E> extends Pane {
      * @param opacity the opacity to be applied to the color <i>c</i> [0,1];
      * @return true if edge was found and color changed; false otherwise.
      */
-    public boolean setEdgeColor(Edge<E, V> e, Color c, double opacity) {
+    public boolean setEdgeColor(IEdge<E, V> e, Color c, double opacity) {
         GraphEdge graphEdge = graphEdgeMap.get(e);
         if (graphEdge == null) {
             return false;
@@ -169,7 +171,7 @@ public class GraphPanel<V, E> extends Pane {
         }
 
         /* create vertex graphical representations */
-        for (Vertex<V> vertex : listOfVertices()) {
+        for (IVertex<V> vertex : listOfVertices()) {
             GraphVertex vertexAnchor = new GraphVertex(0, 0, GRAPH_VERTEX_DIAMETER);
             graphVertexMap.put(vertex, vertexAnchor);
         }
@@ -180,13 +182,13 @@ public class GraphPanel<V, E> extends Pane {
 
         /* create edges graphical representations between existing vertices */
         //this is used to guarantee that no duplicate edges are ever inserted
-        List<Edge<E, V>> edgesToPlace = listOfEdges();
+        List<IEdge<E, V>> edgesToPlace = listOfEdges();
 
-        for (Vertex<V> vertex : graphVertexMap.keySet()) {
+        for (IVertex<V> vertex : graphVertexMap.keySet()) {
 
-            Iterable<IEdge<E, V>> incidentEdges = theGraph.incidentEdges(vertex);
+            Iterable<IEdge<E, V>> accedentEdges = theGraph.accedentEdges(vertex);
 
-            for (IEdge<E, V> edge : incidentEdges) {
+            for (IEdge<E, V> edge : accedentEdges) {
 
                 //if already plotted, ignore edge.
                 if (!edgesToPlace.contains(edge)) {
@@ -194,7 +196,7 @@ public class GraphPanel<V, E> extends Pane {
                 }
 
                 /* (begin) TODO: You may have to adapt this code for other Graph variants. */
-                Vertex<V> oppositeVertex = (Vertex<V>) theGraph.opposite(vertex, edge);
+                IVertex<V> oppositeVertex = theGraph.opposite(vertex, edge);
 
                 GraphVertex graphVertex = graphVertexMap.get(vertex);
                 GraphVertex graphVertexOpposite = graphVertexMap.get(oppositeVertex);
@@ -236,7 +238,7 @@ public class GraphPanel<V, E> extends Pane {
                 graphEdge.setFill(Color.TRANSPARENT);
 
                 this.getChildren().add(graphEdge);
-                graphEdgeMap.put((Edge<E, V>) edge, graphEdge);
+                graphEdgeMap.put(edge, graphEdge);
 
                 if(GRAPH_VERTEX_USE_TOOLTIP) {
                     Tooltip t = new Tooltip(edge.element().toString());
@@ -261,9 +263,9 @@ public class GraphPanel<V, E> extends Pane {
                 double[] arrowShape = new double[]{0, 0, GRAPH_EDGE_WIDTH, 2*GRAPH_EDGE_WIDTH, -GRAPH_EDGE_WIDTH, 2*GRAPH_EDGE_WIDTH};
                 
                 
-                Arrow arrow1 = new Arrow(graphEdge, ARROW_COLOR, 0.2f, arrowShape);
-                graphEdge.addArrow(arrow1);
-                this.getChildren().add(arrow1);
+                //Arrow arrow1 = new Arrow(graphEdge, ARROW_COLOR, 0.2f, arrowShape);
+                //graphEdge.addArrow(arrow1);
+                //this.getChildren().add(arrow1);
 
                 Arrow arrow2 = new Arrow(graphEdge, ARROW_COLOR, 0.8f, arrowShape);
                 graphEdge.addArrow(arrow2);
@@ -277,7 +279,7 @@ public class GraphPanel<V, E> extends Pane {
         }
 
         /* place anchors above lines */
-        for (Vertex<V> vertex : graphVertexMap.keySet()) {
+        for (IVertex<V> vertex : graphVertexMap.keySet()) {
             GraphVertex anchor = graphVertexMap.get(vertex);
 
             /* Style for the vertex representation */
@@ -311,30 +313,30 @@ public class GraphPanel<V, E> extends Pane {
      * TODO: It may be necessary to adjust this method based, if you use another
      * Graph variant
      */
-    private int getTotalEdgesBetween(Vertex<V> v, Vertex<V> u) {
+    private int getTotalEdgesBetween(IVertex<V> v, IVertex<V> u) {
 
         int count = 0;
         for (IEdge<E, V> edge : theGraph.edges()) {
-            /*if (edge.vertexInbound()[0] == v && edge.vertexInbound()[1] == u
-                    || edge.vertices()[0] == u && edge.vertices()[1] == v) {*/
+            if (edge.vertexOutbound() == v && edge.vertexInbound()== u
+                    || edge.vertexOutbound() == u && edge.vertexInbound() == v) {
                 count++;
-            //}
+            }
         }
         return count;
     }
 
-    private List<Edge<E, V>> listOfEdges() {
-        List<Edge<E, V>> list = new LinkedList<>();
+    private List<IEdge<E, V>> listOfEdges() {
+        List<IEdge<E, V>> list = new LinkedList<>();
         for (IEdge<E, V> edge : theGraph.edges()) {
-            list.add((Edge<E, V>) edge);
+            list.add(edge);
         }
         return list;
     }
 
-    private List<Vertex<V>> listOfVertices() {
-        List<Vertex<V>> list = new LinkedList<>();
+    private List<IVertex<V>> listOfVertices() {
+        List<IVertex<V>> list = new LinkedList<>();
         for (IVertex<V> vertex : theGraph.vertices()) {
-            list.add((Vertex<V>) vertex);
+            list.add(vertex);
         }
         return list;
     }

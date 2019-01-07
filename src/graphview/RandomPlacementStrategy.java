@@ -25,7 +25,7 @@ package graphview;
 
 import java.util.Map;
 import java.util.Random;
-import digraph.*;
+import digraph.IVertex;
 
 /**
  * Strategy that randomly places the vertices within the allowed bounds.
@@ -34,11 +34,11 @@ import digraph.*;
 public class RandomPlacementStrategy implements VertexPlacementStrategy {
 
     @Override
-    public <T> void placeVertices(double width, double height, Map<Vertex<T>, GraphVertex> map) {
+    public <T> void placeVertices(double width, double height, Map<IVertex<T>, GraphVertex> map) {
         
         Random rand = new Random();
 
-        for (Vertex<T> vertex : map.keySet()) {
+        for (IVertex<T> vertex : map.keySet()) {
             
             double x = rand.nextDouble() * width;
             double y = rand.nextDouble() * height;

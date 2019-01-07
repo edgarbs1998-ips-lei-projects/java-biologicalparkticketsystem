@@ -21,7 +21,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 /**
@@ -32,14 +34,10 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
     //config attribute
     private ConfigManager config;
     
-    //strategy to show digraph
-    private VertexPlacementStrategy strategy;
-    
     //Layouts
-    private VBox graphViewer;
+    private GraphPanel<PointOfInterest, Connection> graphView;
     private VBox rightMenu;
     private HBox bottomMenu;
-    
     
     //Components
     private ToggleGroup group;
@@ -58,16 +56,15 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
         config = ConfigManager.getInstance();
         
         //model??
-        MapManager mapManager = new MapManager(config.getProperties().getProperty("mapFile"));
+        MapManager mapManager = new MapManager(config.getProperties().getProperty("map.file"));
         
         //instanciate strategy
-        strategy = new CircularSortedPlacementStrategy();
+        //VertexPlacementStrategy strategy = new CircularPlacementStrategy();
+        VertexPlacementStrategy strategy = new CircularSortedPlacementStrategy();
+        //VertexPlacementStrategy strategy = new RandomPlacementStrategy();
         
         //graph viewer container
-        graphViewer = new VBox();
-        graphViewer.setPadding(new Insets(20));
-        GraphPanel<PointOfInterest, Connection> graphView = new GraphPanel<>(mapManager.getDiGraph(), strategy);
-        graphViewer.getChildren().add(graphView);
+        graphView = new GraphPanel<>(mapManager.getDiGraph(), strategy);
         
         //right menu container
         rightMenu = new VBox();
@@ -85,7 +82,7 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
         
         //make foreach to get all points of interest and add radio buttons ofr eahc point
         for(IVertex<PointOfInterest> v : mapManager.getDiGraph().vertices()){
-            RadioButton radio = new RadioButton(v.toString());
+            RadioButton radio = new RadioButton(v.element().toString());
             rightMenu.getChildren().add(radio);
             
         }
@@ -101,8 +98,8 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
     }
     
     @Override
-    public VBox getGraphViewer(){
-        return this.graphViewer;
+    public GraphPanel<PointOfInterest, Connection> getGraphView(){
+        return this.graphView;
     }
     
     @Override

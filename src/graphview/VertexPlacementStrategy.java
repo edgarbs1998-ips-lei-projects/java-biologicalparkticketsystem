@@ -24,7 +24,7 @@
 package graphview;
 
 import java.util.Map;
-import digraph.*;
+import digraph.IVertex;
 
 /**
  * Interface describing a Strategy Pattern method to lay out vertices on a GraphPanel.
@@ -42,5 +42,5 @@ public interface VertexPlacementStrategy {
      * @param height Height of the pane
      * @param map Reference of the map that contains the tuples {Vertex, GraphVertex}
      */
-    public <T> void placeVertices(double width, double height, Map<Vertex<T>, GraphVertex> map);
+    public <T> void placeVertices(double width, double height, Map<IVertex<T>, GraphVertex> map);
 }

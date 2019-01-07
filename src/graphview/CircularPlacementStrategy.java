@@ -26,7 +26,7 @@ package graphview;
 import java.util.Collection;
 import java.util.Map;
 import javafx.geometry.Point2D;
-import digraph.*;
+import digraph.IVertex;
 
 /**
  * Strategy that places the vertices within a circle.
@@ -36,7 +36,7 @@ import digraph.*;
 public class CircularPlacementStrategy implements VertexPlacementStrategy {
 
     @Override
-    public <T> void placeVertices(double width, double height,Map<Vertex<T>, GraphVertex> map) {
+    public <T> void placeVertices(double width, double height,Map<IVertex<T>, GraphVertex> map) {
        
         Point2D center = new Point2D(width / 2, height / 2);
         int N = map.size();
@@ -45,7 +45,7 @@ public class CircularPlacementStrategy implements VertexPlacementStrategy {
         //place first vertice north position, others in clockwise manner
         boolean first = true;
         Point2D p = null;
-        for (Vertex<T> vertex : sort(map)) {
+        for (IVertex<T> vertex : sort(map)) {
 
             GraphVertex get = map.get(vertex);
             
@@ -71,7 +71,7 @@ public class CircularPlacementStrategy implements VertexPlacementStrategy {
         }
     }
     
-    protected <T> Collection<Vertex<T>> sort(Map<Vertex<T>, GraphVertex> map) {
+    protected <T> Collection<IVertex<T>> sort(Map<IVertex<T>, GraphVertex> map) {
         return map.keySet();
     }
 }
