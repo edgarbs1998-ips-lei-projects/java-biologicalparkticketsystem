@@ -6,7 +6,9 @@
 package biologicalparkticketsystem.view;
 
 import biologicalparkticketsystem.controller.ConfigManager;
+import biologicalparkticketsystem.controller.LoggerManager;
 import biologicalparkticketsystem.controller.MapManager;
+import biologicalparkticketsystem.controller.MapManagerException;
 import biologicalparkticketsystem.model.Connection;
 import biologicalparkticketsystem.model.PointOfInterest;
 import digraph.IVertex;
@@ -25,9 +27,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -36,9 +36,6 @@ import javafx.stage.Stage;
  * @author Luis Varela
  */
 public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemInterface{
-    //config attribute
-    private ConfigManager config;
-    
     //Layouts
     private GraphPanel<PointOfInterest, Connection> graphView;
     private VBox rightMenu;
@@ -58,11 +55,19 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
     
     @Override
     public void innitComponents(){
-        //get configs
-        config = ConfigManager.getInstance();
+        ConfigManager config = ConfigManager.getInstance();
+        config.init();
         
-        //model??
-        MapManager mapManager = new MapManager(config.getProperties().getProperty("map.file"));
+        LoggerManager logger = LoggerManager.getInstance();
+        logger.init();
+        
+        MapManager mapManager;
+        try {
+            mapManager = new MapManager(config.getProperties().getProperty("map.file"));
+        } catch (MapManagerException ex) {
+            LoggerManager.getInstance().log(ex);
+            return;
+        }
         
         //instanciate strategy
         //VertexPlacementStrategy strategy = new CircularPlacementStrategy();
