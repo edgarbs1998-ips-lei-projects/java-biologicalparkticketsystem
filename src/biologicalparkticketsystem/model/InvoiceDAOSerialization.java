@@ -5,6 +5,7 @@
  */
 package biologicalparkticketsystem.model;
 
+import biologicalparkticketsystem.controller.LoggerManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -49,8 +50,7 @@ public class InvoiceDAOSerialization implements IInvoiceDAO {
             fileIn.close();
         } catch (IOException ex) {
         } catch ( ClassNotFoundException ex) {
-            // TODO
-            Logger.getLogger(InvoiceDAOSerialization.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         }
     }
     
@@ -63,11 +63,9 @@ public class InvoiceDAOSerialization implements IInvoiceDAO {
             out.close();
             fileOut.close();
         } catch (FileNotFoundException ex) {
-            // TODO
-            Logger.getLogger(InvoiceDAOSerialization.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         } catch (IOException ex) {
-            // TODO
-            Logger.getLogger(InvoiceDAOSerialization.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         }
     }
     

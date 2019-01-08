@@ -69,7 +69,7 @@ public class CourseManager {
      */
     public boolean minimumCriteriaPath(Criteria criteria,
             boolean navigability,
-            List<PointOfInterest> mustVisitPois) {
+            List<PointOfInterest> mustVisitPois) throws CourseManagerException {
         
         if (mustVisitPois.isEmpty()) {
             throw new CourseManagerException("To generate a path a minimum of one point of interest must be selected");
@@ -93,7 +93,10 @@ public class CourseManager {
             this.calculatedPath.setCriteria(criteria);
             this.calculatedPath.setNavigability(navigability);
             this.calculatedPath.setMustVisit(mustVisitPois);
+            
+            LoggerManager.getInstance().log(LoggerManager.Component.COURSE_CALCULATIONS);
         } catch (MapManagerException ex) {
+            LoggerManager.getInstance().log(ex);
             this.calculatedPath = null;
             return false;
         }
@@ -103,7 +106,7 @@ public class CourseManager {
     
     private void heapsAlgorithm(int n, List<PointOfInterest> mustVisitPois,
             IVertex<PointOfInterest> startPoi,
-            Map<IVertex<PointOfInterest>, CalculatedDijkstra> calculatedDijkstras) {
+            Map<IVertex<PointOfInterest>, CalculatedDijkstra> calculatedDijkstras) throws MapManagerException, CourseManagerException {
         if (n == 1) {
             CalculatedPath tempCalculatedPath = calculateMustVisitPOIs(startPoi, mustVisitPois, calculatedDijkstras);
             if (tempCalculatedPath.getCost() <= this.calculatedPath.getCost()) {
@@ -124,7 +127,7 @@ public class CourseManager {
     
     private CalculatedPath calculateMustVisitPOIs(IVertex<PointOfInterest> startPoi,
             List<PointOfInterest> mustVisitPois,
-            Map<IVertex<PointOfInterest>, CalculatedDijkstra> calculatedDijkstras) {
+            Map<IVertex<PointOfInterest>, CalculatedDijkstra> calculatedDijkstras) throws MapManagerException, CourseManagerException {
         
         CalculatedPath tempCalculatedPath = new CalculatedPath();
         int cost = 0;
@@ -150,7 +153,7 @@ public class CourseManager {
             IVertex<PointOfInterest> destination,
             Map<IVertex<PointOfInterest>, CalculatedDijkstra> calculatedDijkstras,
             List<PointOfInterest> pois,
-            List<Connection> connections) {
+            List<Connection> connections) throws CourseManagerException {
         
         List<PointOfInterest> tempPois = new ArrayList<>();
         List<Connection> tempConnections = new ArrayList<>();
@@ -162,7 +165,6 @@ public class CourseManager {
         while (destination != origin) {
             tempPois.add(0, destination.element());
             if (!calculatedDijkstra.getEdges().containsKey(destination) || calculatedDijkstra.getEdges().get(destination) == null) {
-                // TODO Return an error message
                 throw new CourseManagerException("It is not possible to calculate a path for the selected points of interest");
             }
             tempConnections.add(0, calculatedDijkstra.getEdges().get(destination).element());

@@ -65,8 +65,7 @@ public class DocumentManager {
             this.generateTicket(uniqueId, calculatedPath, client);
             this.generateInvoice(uniqueId, calculatedPath, client);
         } catch (IOException ex) {
-            // TODO Change this
-            Logger.getLogger(DocumentManager.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         }
     }
     
@@ -354,6 +353,8 @@ public class DocumentManager {
         
         DaoManager.getInstance().getTicketDao().insertTicket(ticket);
         DaoManager.getInstance().getStatisticsDao().insertTicket(ticket, calculatedPath);
+        
+        LoggerManager.getInstance().log(LoggerManager.Component.TICKETS_ISSUANCE, "uid: " + uniqueId);
     }
     
     private void generateInvoice(String uniqueId, CalculatedPath calculatedPath, Client client) throws FileNotFoundException, IOException {

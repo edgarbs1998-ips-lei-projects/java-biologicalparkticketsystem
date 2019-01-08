@@ -7,6 +7,7 @@ package biologicalparkticketsystem.model;
 
 import biologicalparkticketsystem.controller.ConfigManager;
 import biologicalparkticketsystem.controller.DaoManager;
+import biologicalparkticketsystem.controller.LoggerManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,8 +20,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -59,8 +58,7 @@ public class StatisticsDAOSerialization implements IStatisticsDAO {
             fileIn.close();
         } catch (IOException ex) {
         } catch ( ClassNotFoundException ex) {
-            // TODO
-            Logger.getLogger(InvoiceDAOSerialization.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         }
     }
     
@@ -73,11 +71,9 @@ public class StatisticsDAOSerialization implements IStatisticsDAO {
             out.close();
             fileOut.close();
         } catch (FileNotFoundException ex) {
-            // TODO
-            Logger.getLogger(StatisticsDAOSerialization.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         } catch (IOException ex) {
-            // TODO
-            Logger.getLogger(StatisticsDAOSerialization.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         }
     }
     

@@ -23,7 +23,9 @@ public class ConfigManager {
     
     private Properties properties;
     
-    private ConfigManager() {
+    private ConfigManager() { }
+    
+    public void init() {
         this.properties = new Properties();
         InputStream inputStream = null;
                 
@@ -35,15 +37,15 @@ public class ConfigManager {
             } else {
                 throw new FileNotFoundException("property file '" + CONFIG_FILE_PATH + "' not found in the classpath");
             }
-        } catch (IOException e) {
-            System.out.println("Exception: " + e);
+        } catch (IOException ex) {
+            Logger.getGlobal().log(Level.SEVERE, null, ex);
         } finally {
             try {
                 if (inputStream != null) {
                     inputStream.close();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.SEVERE, null, ex);
+                Logger.getGlobal().log(Level.SEVERE, null, ex);
             }
         }
     }

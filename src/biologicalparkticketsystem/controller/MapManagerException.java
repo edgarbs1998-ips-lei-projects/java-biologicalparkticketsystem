@@ -9,7 +9,7 @@ package biologicalparkticketsystem.controller;
  *
  * @author golds
  */
-public class MapManagerException extends RuntimeException {
+public class MapManagerException extends Exception {
 
     /**
      * Creates a new instance of <code>NewException</code> without detail

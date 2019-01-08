@@ -5,6 +5,7 @@
  */
 package biologicalparkticketsystem.model;
 
+import biologicalparkticketsystem.controller.LoggerManager;
 import java.io.File;
 import java.sql.DriverManager;
 import java.sql.Connection;
@@ -55,8 +56,7 @@ public class TicketDAOSqlLite implements ITicketDAO {
                     + " cost REAL NOT NULL\n"
                     + ");");
         } catch (SQLException ex) {
-            // TODO
-            Logger.getLogger(TicketDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         }
     }
     
@@ -102,8 +102,7 @@ public class TicketDAOSqlLite implements ITicketDAO {
                 }
             }
         } catch (SQLException ex) {
-            // TODO
-            Logger.getLogger(TicketDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         }
         return list;
     }
@@ -121,8 +120,7 @@ public class TicketDAOSqlLite implements ITicketDAO {
             pstmt.setDouble(7, ticket.getTotalCost());
             pstmt.executeUpdate();
         } catch (SQLException ex) {
-            // TODO Logger
-            Logger.getLogger(TicketDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
             return false;
         }
         
@@ -137,8 +135,7 @@ public class TicketDAOSqlLite implements ITicketDAO {
                 pstmt.setDouble(6, item.getCost());
                 pstmt.executeUpdate();
             } catch (SQLException ex) {
-                // TODO Logger
-                Logger.getLogger(TicketDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+                LoggerManager.getInstance().log(ex);
                 return false;
             }
         }

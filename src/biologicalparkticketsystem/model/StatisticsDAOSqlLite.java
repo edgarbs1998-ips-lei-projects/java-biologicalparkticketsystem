@@ -7,6 +7,7 @@ package biologicalparkticketsystem.model;
 
 import biologicalparkticketsystem.controller.ConfigManager;
 import biologicalparkticketsystem.controller.DaoManager;
+import biologicalparkticketsystem.controller.LoggerManager;
 import java.io.File;
 import java.sql.DriverManager;
 import java.sql.Connection;
@@ -60,8 +61,7 @@ public class StatisticsDAOSqlLite implements IStatisticsDAO {
                     + " visits INTEGER NOT NULL\n"
                     + ");");
         } catch (SQLException ex) {
-            // TODO
-            Logger.getLogger(StatisticsDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         }
     }
     
@@ -92,8 +92,7 @@ public class StatisticsDAOSqlLite implements IStatisticsDAO {
         } catch (SQLException ex) {
             statistics = new Statistics();
             statistics.setMapName(this.mapName);
-            // TODO
-            Logger.getLogger(StatisticsDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         }
         
         return statistics;
@@ -105,8 +104,7 @@ public class StatisticsDAOSqlLite implements IStatisticsDAO {
             pstmt.setString(1, this.mapName);
             pstmt.executeUpdate();
         } catch (SQLException ex) {
-            // TODO Logger
-            Logger.getLogger(StatisticsDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         }
         
         sql = "DELETE FROM StatisticsPoiVisits WHERE mapName LIKE ?";
@@ -114,8 +112,7 @@ public class StatisticsDAOSqlLite implements IStatisticsDAO {
             pstmt.setString(1, this.mapName);
             pstmt.executeUpdate();
         } catch (SQLException ex) {
-            // TODO Logger
-            Logger.getLogger(StatisticsDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         }
         
         sql = "INSERT INTO Statistics (mapName, soldTicketsPriceAverage, soldBikeTickets, soldFootTickets) VALUES (?, ?, ?, ?)";
@@ -126,8 +123,7 @@ public class StatisticsDAOSqlLite implements IStatisticsDAO {
             pstmt.setInt(4, statistics.getSoldFootTickets());
             pstmt.executeUpdate();
         } catch (SQLException ex) {
-            // TODO Logger
-            Logger.getLogger(StatisticsDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         }
         
         for (int poi : statistics.getTotalPoisVisits().keySet()) {
@@ -138,8 +134,7 @@ public class StatisticsDAOSqlLite implements IStatisticsDAO {
                 pstmt.setInt(3, statistics.getTotalPoisVisits().get(poi));
                 pstmt.executeUpdate();
             } catch (SQLException ex) {
-                // TODO Logger
-                Logger.getLogger(StatisticsDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+                LoggerManager.getInstance().log(ex);
             }
         }
     }

@@ -5,6 +5,7 @@
  */
 package biologicalparkticketsystem.model;
 
+import biologicalparkticketsystem.controller.LoggerManager;
 import java.io.File;
 import java.sql.DriverManager;
 import java.sql.Connection;
@@ -65,8 +66,7 @@ public class InvoiceDAOSqlLite implements IInvoiceDAO {
                     + " country TEXT NOT NULL\n"
                     + ");");
         } catch (SQLException ex) {
-            // TODO
-            Logger.getLogger(InvoiceDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         }
     }
     
@@ -135,8 +135,7 @@ public class InvoiceDAOSqlLite implements IInvoiceDAO {
                 }
             }
         } catch (SQLException ex) {
-            // TODO
-            Logger.getLogger(InvoiceDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
         }
         return list;
     }
@@ -154,8 +153,7 @@ public class InvoiceDAOSqlLite implements IInvoiceDAO {
             pstmt.setString(7, invoice.getCurrency());
             pstmt.executeUpdate();
         } catch (SQLException ex) {
-            // TODO Logger
-            Logger.getLogger(InvoiceDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
             return false;
         }
         
@@ -171,8 +169,7 @@ public class InvoiceDAOSqlLite implements IInvoiceDAO {
                 pstmt.setDouble(7, item.getTotal());
                 pstmt.executeUpdate();
             } catch (SQLException ex) {
-                // TODO Logger
-                Logger.getLogger(InvoiceDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+                LoggerManager.getInstance().log(ex);
                 return false;
             }
         }
@@ -189,8 +186,7 @@ public class InvoiceDAOSqlLite implements IInvoiceDAO {
             pstmt.setString(7, client.getAddress().getCountry());
             pstmt.executeUpdate();
         } catch (SQLException ex) {
-            // TODO Logger
-            Logger.getLogger(InvoiceDAOSqlLite.class.getName()).log(Level.SEVERE, null, ex);
+            LoggerManager.getInstance().log(ex);
             return false;
         }
         

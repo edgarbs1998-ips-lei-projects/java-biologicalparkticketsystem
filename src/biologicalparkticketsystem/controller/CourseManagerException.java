@@ -9,7 +9,7 @@ package biologicalparkticketsystem.controller;
  *
  * @author golds
  */
-public class CourseManagerException extends RuntimeException {
+public class CourseManagerException extends Exception {
 
     /**
      * Creates a new instance of <code>NewException</code> without detail

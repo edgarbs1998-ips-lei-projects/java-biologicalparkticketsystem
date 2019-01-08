@@ -25,7 +25,7 @@ public class MapManager {
      * Course manager constructor
      * @param mapFilePath
      */
-    public MapManager(String mapFilePath) {
+    public MapManager(String mapFilePath) throws MapManagerException {
         this.digraph = new DiGraph<>();
         this.startPoint = null;
         
@@ -40,7 +40,7 @@ public class MapManager {
         return this.startPoint;
     }
     
-    private void loadMapFile(String mapFilePath) {
+    private void loadMapFile(String mapFilePath) throws MapManagerException {
         try {
             File mapFile = new File(mapFilePath);
             Scanner scanner = new Scanner(mapFile);
@@ -58,7 +58,7 @@ public class MapManager {
                 String line = scanner.nextLine();
                 String[] fields = line.split(", ");
                 if (fields.length != 2) {
-                    throw new Exception("Expected a POI with 2 fields while reading park map file");
+                    throw new MapManagerException("Expected a POI with 2 fields while reading park map file");
                 }
                 PointOfInterest poi = new PointOfInterest(
                         Integer.parseInt(fields[0]),
@@ -70,7 +70,7 @@ public class MapManager {
                 ++countPOIs;
             }
             if (numberPOIs != countPOIs) {
-                throw new Exception("Expected " + numberPOIs + " POIs from park map file but found " + countPOIs);
+                throw new MapManagerException("Expected " + numberPOIs + " POIs from park map file but found " + countPOIs);
             }
 
             // Add connections
@@ -84,7 +84,7 @@ public class MapManager {
                 String line = scanner.nextLine();
                 String[] fields = line.split(", ");
                 if (fields.length != 8) {
-                    throw new Exception("Expected a Connection with 8 fields while reading park map file");
+                    throw new MapManagerException("Expected a Connection with 8 fields while reading park map file");
                 }
                 Connection con = null;
                 switch (fields[1]) {
@@ -115,7 +115,7 @@ public class MapManager {
                 ++countConnections;
             }
             if (numberConnections != countConnections) {
-                throw new Exception("Expected " + numberConnections + " Connections from park map file but found " + countConnections);
+                throw new MapManagerException("Expected " + numberConnections + " Connections from park map file but found " + countConnections);
             }
 
             // Set startPoint
@@ -127,7 +127,6 @@ public class MapManager {
         }
     }
     
-    // TODO Check if required
     public PointOfInterest getPointOfInterestById(int id) throws MapManagerException {
         IVertex<PointOfInterest> find = null;
         
@@ -215,7 +214,7 @@ public class MapManager {
      * @return
      * @throws MapManagerException
      */
-    private List<Connection> getConnectionsBetween(PointOfInterest poi1, PointOfInterest poi2) {
+    private List<Connection> getConnectionsBetween(PointOfInterest poi1, PointOfInterest poi2) throws MapManagerException {
         
         List<Connection> connectionList = new ArrayList<>();
         
@@ -238,29 +237,34 @@ public class MapManager {
     
     @Override
     public String toString() {
-        String returnString = "MAP MANAGER (" + digraph.numVertices() + " Points of Interest | " + digraph.numEdges() + " Connections)\n";
-        for(IVertex<PointOfInterest> p1 : digraph.vertices()){            
-            for(IVertex<PointOfInterest> p2 : digraph.vertices()){
-                if(p1 == p2){
-                    continue;
-                }
-
-                returnString += "\t" + p1.element().toString() + " TO " + p2.element().toString() + "\n";
-
-                List<Connection> connections = getConnectionsBetween(p1.element(), p2.element());
-                if(connections.isEmpty()) {
-                    returnString += "\t\t(no connections)\n";
-                } else {
-                    for (Connection connection : connections) {
-                        returnString += "\t\t" + connection + "\n";
+        try {
+            String returnString = "MAP MANAGER (" + digraph.numVertices() + " Points of Interest | " + digraph.numEdges() + " Connections)\n";
+            for(IVertex<PointOfInterest> p1 : digraph.vertices()){            
+                for(IVertex<PointOfInterest> p2 : digraph.vertices()){
+                    if(p1 == p2){
+                        continue;
                     }
-                }
 
-                returnString += "\n";
+                    returnString += "\t" + p1.element().toString() + " TO " + p2.element().toString() + "\n";
+
+                    List<Connection> connections = getConnectionsBetween(p1.element(), p2.element());
+                    if(connections.isEmpty()) {
+                        returnString += "\t\t(no connections)\n";
+                    } else {
+                        for (Connection connection : connections) {
+                            returnString += "\t\t" + connection + "\n";
+                        }
+                    }
+
+                    returnString += "\n";
+                }
             }
+
+            return returnString;
+        } catch (MapManagerException ex) {
+            LoggerManager.getInstance().log(ex);
+            return null;
         }
-        
-        return returnString;
     }
     
 }
