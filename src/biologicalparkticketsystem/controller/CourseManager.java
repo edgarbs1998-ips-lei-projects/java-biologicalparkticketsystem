@@ -161,7 +161,7 @@ public class CourseManager {
         
         while (destination != origin) {
             tempPois.add(0, destination.element());
-            if (!calculatedDijkstra.getEdges().containsKey(destination)) {
+            if (!calculatedDijkstra.getEdges().containsKey(destination) || calculatedDijkstra.getEdges().get(destination) == null) {
                 // TODO Return an error message
                 throw new CourseManagerException("It is not possible to calculate a path for the selected points of interest");
             }
