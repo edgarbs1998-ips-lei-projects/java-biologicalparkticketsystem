@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 /**
@@ -26,18 +28,17 @@ public class BiologicalParkTicketSystem extends Application {
     public void start(Stage primaryStage) {
         BiologicalParkTicketSystemUI view = new BiologicalParkTicketSystemUI();
         
-        // root
-//        BorderPane root = new BorderPane();
-//        root.setCenter(view.getGraphView());
-////        root.setBottom(view.getbottomMenu());
-////        root.setRight(view.getRightMenu());
-//        root.setPadding(new Insets(20));
-//        
+        //root
+        BorderPane root = new BorderPane();
+        root.setCenter(view.getGraphView());
+        root.setBottom(view.getbottomMenu());
+        root.setRight(view.getRightMenu());
+        root.setPadding(new Insets(20));
+        
         //scene
-        Scene scene = new Scene(view.getGraphView(), 800, 600);
+        Scene scene = new Scene(root, 800, 600);
         view.getGraphView().plotGraph();
-        
-        
+
         //stage build
         primaryStage.setTitle("Biological Park");
         primaryStage.setScene(scene);
