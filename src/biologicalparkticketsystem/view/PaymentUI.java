@@ -99,7 +99,7 @@ public class PaymentUI implements PaymentInterface{
         payBtn.setOnAction((event) -> {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Personal information");
-            alert.setHeaderText("Whe may need more information about you, before purchasing the ticket");
+            alert.setHeaderText("We may need more information about you, before purchasing the ticket");
             alert.setContentText("Do you want to use your NIF?");
             Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK){
@@ -145,6 +145,8 @@ public class PaymentUI implements PaymentInterface{
                 } else {
                     
                 }
+                
+                // TODO After ticket generation CourseManager.clearCalculatedCourses
         });
         backBtn = new Button("Back");
         buttonMenu.getChildren().addAll(backBtn, payBtn);

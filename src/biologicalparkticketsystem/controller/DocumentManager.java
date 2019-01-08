@@ -34,8 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class DocumentManager {
     
@@ -64,6 +62,7 @@ public class DocumentManager {
         try {
             this.generateTicket(uniqueId, calculatedPath, client);
             this.generateInvoice(uniqueId, calculatedPath, client);
+            
         } catch (IOException ex) {
             LoggerManager.getInstance().log(ex);
         }

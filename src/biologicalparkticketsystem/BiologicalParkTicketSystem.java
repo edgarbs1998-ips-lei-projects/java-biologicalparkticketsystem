@@ -51,7 +51,7 @@ public class BiologicalParkTicketSystem extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-        
+//        
 //        ConfigManager config = ConfigManager.getInstance();
 //        config.init();
 //        
@@ -78,8 +78,8 @@ public class BiologicalParkTicketSystem extends Application {
 //            mustVisitPois.add(poi8);
 //            PointOfInterest poi4 = mapManager.getPointOfInterestById(4);
 //            mustVisitPois.add(poi4);
-//            PointOfInterest poi6 = mapManager.getPointOfInterestById(6);
-//            mustVisitPois.add(poi6);
+////            PointOfInterest poi6 = mapManager.getPointOfInterestById(6);
+////            mustVisitPois.add(poi6);
 //            PointOfInterest poi7 = mapManager.getPointOfInterestById(7);
 //            mustVisitPois.add(poi7);
 //        } catch (MapManagerException ex) {
@@ -97,29 +97,38 @@ public class BiologicalParkTicketSystem extends Application {
 //            // TODO Displaye error message to user
 //            return;
 //        }
+//        
 //        System.out.println(courseManager.toString());
+////        courseManager.undoCalculatedCourse();
+////        System.out.println(courseManager.toString());
+////        courseManager.undoCalculatedCourse();
+////        System.out.println(courseManager.toString());
+////        courseManager.undoCalculatedCourse();
+////        System.out.println(courseManager.toString());
+////        courseManager.clearCalculatedCourses();
+////        System.out.println(courseManager.toString());
 //        
-//        Client companyData = new Client(
-//                config.getProperties().get("company.name").toString(),
-//                config.getProperties().get("company.nif").toString()
-//        );
-//        Client.Address companyAddress = companyData.new Address(
-//                config.getProperties().get("company.address.adress").toString(),
-//                config.getProperties().get("company.address.postal_code").toString(),
-//                config.getProperties().get("company.address.location").toString(),
-//                config.getProperties().get("company.address.country").toString()
-//        );
-//        companyData.setAddress(companyAddress);
-//        
-//        Client client = new Client("Edgar Santos", "267400292");
-//        Client.Address clientAddress = client.new Address("Est. da Charneca", "2665-506", "Venda do Pinheiro", "Portugal");
-//        client.setAddress(clientAddress);
-//        
-//        DaoManager daoManager = DaoManager.getInstance();
-//        daoManager.init(config);
+////        Client companyData = new Client(
+////                config.getProperties().get("company.name").toString(),
+////                config.getProperties().get("company.nif").toString()
+////        );
+////        Client.Address companyAddress = companyData.new Address(
+////                config.getProperties().get("company.address.adress").toString(),
+////                config.getProperties().get("company.address.postal_code").toString(),
+////                config.getProperties().get("company.address.location").toString(),
+////                config.getProperties().get("company.address.country").toString()
+////        );
+////        companyData.setAddress(companyAddress);
+////        
+////        Client client = new Client("Edgar Santos", "267400292");
+////        Client.Address clientAddress = client.new Address("Est. da Charneca", "2665-506", "Venda do Pinheiro", "Portugal");
+////        client.setAddress(clientAddress);
+////        
+////        DaoManager daoManager = DaoManager.getInstance();
+////        daoManager.init(config);
 //
-//        DocumentManager documentManager = new DocumentManager(config.getProperties().getProperty("documents.folder"), companyData, Double.parseDouble(config.getProperties().get("documents.vat").toString()));
-//        documentManager.generateDocuments(courseManager.getCalculatedPath(), client);
+////        DocumentManager documentManager = new DocumentManager(config.getProperties().getProperty("documents.folder"), companyData, Double.parseDouble(config.getProperties().get("documents.vat").toString()));
+////        documentManager.generateDocuments(courseManager.getCalculatedPath(), client);
 //        //documentManager.generateDocuments(courseManager.getCalculatedPath(), null);
 //        
 ////        for (Ticket ticket : daoManager.getTicketDao().selectTickets()) {
@@ -130,19 +139,19 @@ public class BiologicalParkTicketSystem extends Application {
 ////            System.out.println(invoice);
 ////        }
 //
-//        System.out.println("Sold Bike Tickets: " + daoManager.getStatisticsDao().getSoldBikeTickets());
-//        System.out.println("Sold Foot Tickets: " + daoManager.getStatisticsDao().getSoldFootTickets());
-//        System.out.println("Sold Tickets Price Average: " + daoManager.getStatisticsDao().getSoldTicketsPriceAverage());
-//        System.out.println("Top 10 Visited Pois:");
-//        int count = 0;
-//        for (int poiId : daoManager.getStatisticsDao().getTop10VisitedPois().keySet()) {
-//            try {
-//                PointOfInterest poi = mapManager.getPointOfInterestById(poiId);
-//                System.out.println("\t" + ++count + " - Name: " + poi.getPoiName() + "; Visits: " + daoManager.getStatisticsDao().getTop10VisitedPois().get(poiId));
-//            } catch (MapManagerException ex) {
-//                LoggerManager.getInstance().log(ex);
-//            }
-//        }
+////        System.out.println("Sold Bike Tickets: " + daoManager.getStatisticsDao().getSoldBikeTickets());
+////        System.out.println("Sold Foot Tickets: " + daoManager.getStatisticsDao().getSoldFootTickets());
+////        System.out.println("Sold Tickets Price Average: " + daoManager.getStatisticsDao().getSoldTicketsPriceAverage());
+////        System.out.println("Top 10 Visited Pois:");
+////        int count = 0;
+////        for (int poiId : daoManager.getStatisticsDao().getTop10VisitedPois().keySet()) {
+////            try {
+////                PointOfInterest poi = mapManager.getPointOfInterestById(poiId);
+////                System.out.println("\t" + ++count + " - Name: " + poi.getPoiName() + "; Visits: " + daoManager.getStatisticsDao().getTop10VisitedPois().get(poiId));
+////            } catch (MapManagerException ex) {
+////                LoggerManager.getInstance().log(ex);
+////            }
+////        }
     }
     
 }

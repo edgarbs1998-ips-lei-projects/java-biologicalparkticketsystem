@@ -18,8 +18,8 @@ public class CalculatedPath {
     private Criteria criteria;
     private boolean navigability;
     private int cost;
-    private final List<PointOfInterest> pointsOfInterest;
-    private final List<Connection> connections;
+    private List<PointOfInterest> pointsOfInterest;
+    private List<Connection> connections;
     private List<PointOfInterest> mustVisit;
     
     public CalculatedPath() {
@@ -67,6 +67,19 @@ public class CalculatedPath {
     
     public void setMustVisit(List<PointOfInterest> mustVisit) {
         this.mustVisit = mustVisit;
+    }
+    
+    public CalculatedPathMemento createMomento() {
+        return new CalculatedPathMemento(criteria, navigability, cost, pointsOfInterest, connections, mustVisit);
+    }
+    
+    public void setMemento(CalculatedPathMemento memento) {
+        criteria = memento.getMementoCriteria();
+        navigability = memento.getMementoNavigability();
+        cost = memento.getMementoCost();
+        pointsOfInterest = memento.getMementoPointsOfInterest();
+        connections = memento.getMementoConnections();
+        mustVisit = memento.getMementoMustVisit();
     }
     
 }

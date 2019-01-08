@@ -2,6 +2,7 @@ package biologicalparkticketsystem.controller;
 
 import biologicalparkticketsystem.model.CalculatedDijkstra;
 import biologicalparkticketsystem.model.CalculatedPath;
+import biologicalparkticketsystem.model.CalculatedPathCareTaker;
 import biologicalparkticketsystem.model.Connection;
 import biologicalparkticketsystem.model.PointOfInterest;
 import digraph.IEdge;
@@ -45,6 +46,7 @@ public class CourseManager {
     };
     
     private final MapManager mapManager;
+    private CalculatedPathCareTaker calculatedPathCareTaker;
     private CalculatedPath calculatedPath;
 
     /**
@@ -53,11 +55,21 @@ public class CourseManager {
      */
     public CourseManager(MapManager mapManager) {
         this.mapManager = mapManager;
+        this.calculatedPathCareTaker = new CalculatedPathCareTaker();
         this.calculatedPath = null;
     }
     
     public CalculatedPath getCalculatedPath() {
         return this.calculatedPath;
+    }
+    
+    public void undoCalculatedCourse() {
+        this.calculatedPathCareTaker.restoreState(this.calculatedPath);
+    }
+    
+    public void clearCalculatedCourses() {
+        this.calculatedPathCareTaker.clearStates();
+        this.calculatedPath = null;
     }
     
     /**
@@ -76,6 +88,10 @@ public class CourseManager {
         }
         
         try {
+            if (this.calculatedPath != null) {
+                this.calculatedPathCareTaker.saveState(this.calculatedPath);
+            }
+            
             this.calculatedPath = new CalculatedPath();
 
             IVertex<PointOfInterest> startPoi = this.mapManager.checkPointOfInterest(this.mapManager.getStartPoint());

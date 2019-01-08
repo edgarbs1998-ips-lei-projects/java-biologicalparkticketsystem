@@ -115,7 +115,7 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
             paymentStage.show();
             //System.out.println("Button Action");
         });
-        calculateBtn = new Button("Calculate");
+        calculateBtn = new Button("Calculate"); // TODO Displaye error message to user on error
         ObservableList<String> options = FXCollections.observableArrayList("Shortest","Cheapest","Most visited");
         PathComboBox = new ComboBox(options);
         PathComboBox.setValue("Path");
