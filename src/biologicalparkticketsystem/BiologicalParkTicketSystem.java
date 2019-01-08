@@ -1,6 +1,15 @@
 package biologicalparkticketsystem;
 
+import biologicalparkticketsystem.controller.ConfigManager;
+import biologicalparkticketsystem.controller.CourseManager;
+import biologicalparkticketsystem.controller.DaoManager;
+import biologicalparkticketsystem.controller.DocumentManager;
+import biologicalparkticketsystem.controller.MapManager;
+import biologicalparkticketsystem.model.Client;
+import biologicalparkticketsystem.model.PointOfInterest;
 import biologicalparkticketsystem.view.BiologicalParkTicketSystemUI;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;

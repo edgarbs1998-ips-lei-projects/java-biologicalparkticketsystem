@@ -40,3 +40,7 @@ nbdist/
 
 # Include 3rdparty libraries
 !3rdparty/*
+
+# Exclude documents and data folders
+documents/
+data/

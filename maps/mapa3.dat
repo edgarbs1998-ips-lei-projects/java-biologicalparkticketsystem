@@ -1,0 +1,28 @@
+10
+1, Entrada
+2, Pomar
+3, Ilha dos Macacos
+4, Fonte
+5, Moinho
+6, Quinta Pedagogica
+7, Prado
+8, Lago
+9, Parque Infantil
+10, Borboletario
+16
+1, caminho, floresta, 1, 2, true, 20, 120
+2, caminho, selva, 2, 3, true, 40, 10
+3, caminho, deserto, 3, 4, true, 2, 70
+4, ponte, ponteAzul, 4, 5, true, 10, 50
+5, ponte, ponteRosa, 5, 8, true, 18, 210
+6, caminho, escuro, 8, 1, true, 2, 20
+7, caminho, doce, 8, 7, false, 30, 340
+8, caminho, florido, 6, 7, false, 60, 120
+9, caminho, planíci, 1, 5, true, 75, 60
+10, caminho, pantano, 5, 6, true, 30, 500
+11, caminho, cascata, 6, 8, true, 20, 80
+12, caminho, morto, 4, 9, true, 0, 500
+13, caminho, infantil, 9, 10, true, 40, 350
+14, caminho, bosque, 10, 7, true, 90, 60
+15, caminho, jardim, 9, 2, true, 20, 490
+16, ponte, ponteVermelha, 5, 10, false, 70, 180

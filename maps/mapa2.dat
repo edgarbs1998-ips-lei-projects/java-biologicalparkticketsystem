@@ -1,0 +1,23 @@
+7
+1, Entrada
+2, Elefantes
+3, Girafas
+4, Águias
+5, Corcodilos
+6, Cavalos
+7, Pinguim
+14
+1, ponte, ponteAmarela, 1, 7, true, 14, 90
+2, caminho, pantano, 1, 5, false, 4, 30
+3, caminho, selva, 5, 2, true, 8, 40
+4, ponte, ponteInclinada, 4, 5, true, 26, 65
+5, caminho, planíci, 7, 4, true, 2, 20
+6, ponte, ponteComprida, 1, 3, false, 28, 240
+7, caminho, deserto, 1, 2, true, 1, 15
+8, caminho, jardim, 3, 6, true, 8, 25
+9, caminho, lago, 7, 3, true, 11, 35
+10, ponte, ponteVelha, 6, 5, false, 3, 20
+11, caminho, cascata, 2, 3, true, 7, 45
+12, ponte, pontePássaros, 7, 6, false, 6, 40
+13, caminho, topeiras, 2, 6, true, 0, 22
+14, ponte, ponteCircular, 4, 1, true, 22, 120
