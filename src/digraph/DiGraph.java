@@ -244,6 +244,21 @@ public class DiGraph<V, E> implements IDiGraph<V, E> {
 
         return oldElement;
     }
+    
+    public IVertex<V> getVertexByElement(V element) {
+        return vertices.get(element);
+    }
+    
+    public IEdge<E, V> getEdgeByElement(E edge, V vertex) {
+        IVertex<V> tempVertex = getVertexByElement(vertex);
+        List<IEdge<E, V>> tempEdge = edges.get(edge);
+        
+        if (tempEdge.get(0).vertexOutbound() == tempVertex) {
+            return tempEdge.get(0);
+        } else {
+            return tempEdge.get(1);
+        }
+    }
 
     private Vertex vertexOf(V vElement) {
         for (IVertex<V> v : vertices.values()) {

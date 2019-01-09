@@ -23,6 +23,7 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -79,7 +80,8 @@ public class DocumentManager {
         Date now = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         
-        PdfDocument pdfDocument = new PdfDocument(new PdfWriter(this.documentPath + (client == null ? "customer" : client.getNif()) + "_" + simpleDateFormat.format(now) + "_bilhete.pdf"));
+        String pdfPath = this.documentPath + (client == null ? "customer" : client.getNif()) + "_" + simpleDateFormat.format(now) + "_bilhete.pdf";
+        PdfDocument pdfDocument = new PdfDocument(new PdfWriter(pdfPath));
         
         try (Document document = new Document(pdfDocument)) {
         
@@ -153,7 +155,7 @@ public class DocumentManager {
             cell.setWidth(UnitValue.createPercentValue(15));
             table.addCell(cell);
             
-            paragraph = new Paragraph(calculatedPath.getCriteria().getName());
+            paragraph = new Paragraph(calculatedPath.getCriteria().toString());
             paragraph.setFont(fontRegular).setFontSize(11);
             cell = new Cell().add(paragraph);
             cell.setBorder(Border.NO_BORDER);
@@ -346,7 +348,7 @@ public class DocumentManager {
         ticket.setIssueDate(simpleDateFormat.format(now));
         ticket.setClientNif((client == null ? "customer" : client.getNif()));
         ticket.setPathType((calculatedPath.getNavigability() == true ? 1 : 0));
-        ticket.setPathCriteria(calculatedPath.getCriteria().getName());
+        ticket.setPathCriteria(calculatedPath.getCriteria().toString());
         ticket.setTotalDistance(totalDistance);
         ticket.setTotalCost(totalCost);
         
@@ -354,6 +356,8 @@ public class DocumentManager {
         DaoManager.getInstance().getStatisticsDao().insertTicket(ticket, calculatedPath);
         
         LoggerManager.getInstance().log(LoggerManager.Component.TICKETS_ISSUANCE, "uid: " + uniqueId);
+        
+        openPdf(pdfPath);
     }
     
     private void generateInvoice(String uniqueId, CalculatedPath calculatedPath, Client client) throws FileNotFoundException, IOException {
@@ -369,7 +373,8 @@ public class DocumentManager {
         Date now = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
         
-        PdfDocument pdfDocument = new PdfDocument(new PdfWriter(this.documentPath + (client == null ? "customer" : client.getNif()) + "_" + simpleDateFormat.format(now) + "_fatura.pdf"));
+        String pdfPath = this.documentPath + (client == null ? "customer" : client.getNif()) + "_" + simpleDateFormat.format(now) + "_fatura.pdf";
+        PdfDocument pdfDocument = new PdfDocument(new PdfWriter(pdfPath));
         
         try (Document document = new Document(pdfDocument)) {
             
@@ -728,6 +733,25 @@ public class DocumentManager {
         invoice.setCurrency(CURRENCY);
         
         DaoManager.getInstance().getInvoiceDao().insertInvoice(invoice);
+        
+        openPdf(pdfPath);
+    }
+    
+    private void openPdf(String path) {
+        try {
+            File pdfFile = new File(path);
+            if (pdfFile.exists()) {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop.getDesktop().open(pdfFile);
+                } else {
+                    //System.out.println("Awt Desktop is not supported!");
+                }
+            } else {
+                //System.out.println("File is not exists!");
+            }
+        } catch (IOException ex) {
+            LoggerManager.getInstance().log(ex);
+        }
     }
     
     private class CustomDottedLine extends DottedLine {

@@ -38,7 +38,7 @@ public class PointOfInterest {
      */
     @Override
     public String toString() {
-        return this.getPoiName() + "(" + this.getPoiId() + ")";
+        return this.getPoiName();
     }
 
     @Override

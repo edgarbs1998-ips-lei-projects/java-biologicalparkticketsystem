@@ -8,6 +8,8 @@ package biologicalparkticketsystem.model;
 import biologicalparkticketsystem.controller.ConfigManager;
 import biologicalparkticketsystem.controller.DaoManager;
 import biologicalparkticketsystem.controller.LoggerManager;
+import biologicalparkticketsystem.controller.MapManager;
+import biologicalparkticketsystem.controller.MapManagerException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,12 +30,15 @@ import java.util.stream.Collectors;
  */
 public class StatisticsDAOSerialization implements IStatisticsDAO {
     
+    private MapManager mapManager;
     private final String basePath;
     private Map<String, Statistics> map;
     private final static String FILENAME = "statistics.dat";
     private final String mapName;
     
-    public StatisticsDAOSerialization (String basePath) {
+    public StatisticsDAOSerialization (String basePath, MapManager mapManager) {
+        this.mapManager = mapManager;
+        
         ConfigManager config = ConfigManager.getInstance();
         this.mapName = config.getProperties().getProperty("map.name");
         
@@ -147,16 +152,28 @@ public class StatisticsDAOSerialization implements IStatisticsDAO {
     }
     
     @Override
-    public Map<Integer, Integer> getTop10VisitedPois() {
+    public Map<PointOfInterest, Integer> getTop10VisitedPois() {
         Statistics statistics = getStatistics();
         Map<Integer, Integer> totalPoisVisits = statistics.getTotalPoisVisits();
         
-        return totalPoisVisits.entrySet().stream()
+        // TODO Improve code
+        Map<PointOfInterest, Integer> newTotalPoisVisits = new HashMap<>();
+        for (int poiId : totalPoisVisits.keySet()) {
+            try {
+                PointOfInterest poi = mapManager.getPointOfInterestById(poiId);
+                newTotalPoisVisits.put(poi, totalPoisVisits.get(poiId));
+            } catch (MapManagerException ex) {
+                LoggerManager.getInstance().log(ex);
+            }
+        }
+        
+        return newTotalPoisVisits.entrySet().stream()
                 .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
                 .limit(10)
                 .collect(Collectors.toMap(
                         Map.Entry::getKey, Map.Entry::getValue,
-                        (eq, e2) -> e2, LinkedHashMap::new
+                        (eq, e2) -> e2,
+                        LinkedHashMap::new
                 ));
     }
     

@@ -15,8 +15,7 @@ public class ConnectionPath extends Connection {
     
     @Override
     public String toString() {
-        return String.format("%s {type path, %d meters, %d €}",
-                getConnectionName(), getDistance(), getCostEuros());
+        return this.getConnectionName();
     }
     
 }

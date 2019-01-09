@@ -33,17 +33,17 @@ public class DaoManager {
         return instance;
     }
     
-    public void init(ConfigManager config) {
+    public void init(ConfigManager config, MapManager mapManager) {
         switch (config.getProperties().getProperty("persistence.type")) {
             case "serialization":
                 this.ticketDao = new TicketDAOSerialization(config.getProperties().getProperty("persistence.erialization.folder"));
                 this.invoiceDao = new InvoiceDAOSerialization(config.getProperties().getProperty("persistence.erialization.folder"));
-                this.statisticsDao = new StatisticsDAOSerialization(config.getProperties().getProperty("persistence.erialization.folder"));
+                this.statisticsDao = new StatisticsDAOSerialization(config.getProperties().getProperty("persistence.erialization.folder"), mapManager);
                 break;
             case "sqllite":
                 this.ticketDao = new TicketDAOSqlLite(config.getProperties().getProperty("persistence.sqllite.file"));
                 this.invoiceDao = new InvoiceDAOSqlLite(config.getProperties().getProperty("persistence.sqllite.file"));
-                this.statisticsDao = new StatisticsDAOSqlLite(config.getProperties().getProperty("persistence.sqllite.file"));
+                this.statisticsDao = new StatisticsDAOSqlLite(config.getProperties().getProperty("persistence.sqllite.file"), mapManager);
                 break;
             default:
                 throw new IllegalArgumentException("ticket dao type does not exists");

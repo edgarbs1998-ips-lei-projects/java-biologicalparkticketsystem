@@ -116,6 +116,7 @@ public class GraphPanel<V, E> extends Pane {
         for (IEdge<E, V> edge : graphEdgeMap.keySet()) {
             GraphEdge graphEdge = graphEdgeMap.get(edge);
             graphEdge.setFill(GRAPH_EDGE_COLOR);
+            graphEdge.setStroke(GRAPH_EDGE_COLOR);
         }
 
     }

@@ -17,6 +17,6 @@ public interface IStatisticsDAO {
     public int getSoldBikeTickets();
     public int getSoldFootTickets();
     public double getSoldTicketsPriceAverage();
-    public Map<Integer, Integer> getTop10VisitedPois();
+    public Map<PointOfInterest, Integer> getTop10VisitedPois();
     
 }

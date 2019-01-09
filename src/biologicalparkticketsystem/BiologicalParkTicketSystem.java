@@ -1,10 +1,19 @@
 package biologicalparkticketsystem;
 
+import biologicalparkticketsystem.controller.DaoManager;
+import biologicalparkticketsystem.controller.DocumentManager;
+import biologicalparkticketsystem.controller.MapManagerException;
+import biologicalparkticketsystem.model.Client;
+import biologicalparkticketsystem.model.Invoice;
+import biologicalparkticketsystem.model.PointOfInterest;
+import biologicalparkticketsystem.model.Ticket;
 import biologicalparkticketsystem.view.BiologicalParkTicketSystemUI;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 /**
@@ -22,16 +31,24 @@ public class BiologicalParkTicketSystem extends Application {
         root.setCenter(view.getGraphView());
         root.setBottom(view.getbottomMenu());
         root.setRight(view.getRightMenu());
-        root.setPadding(new Insets(20));
+        root.setPadding(new Insets(10));
+        
+//        HBox root = new HBox();
+//        root.getChildren().add(view.getGraphView());
+//        root.getChildren().add(view.getbottomMenu());
+//        root.getChildren().add(view.getRightMenu());
         
         //scene
         Scene scene = new Scene(root, 800, 600);
-        view.getGraphView().plotGraph();
-
+        
         //stage build
         primaryStage.setTitle("Biological Park");
         primaryStage.setScene(scene);
+        primaryStage.setMaximized(true);
         primaryStage.show();
+        
+        view.getGraphView().plotGraph();
+        view.setStartPoiColor();
     }
 
     /**
@@ -39,7 +56,7 @@ public class BiologicalParkTicketSystem extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-//        
+        
 //        ConfigManager config = ConfigManager.getInstance();
 //        config.init();
 //        
@@ -96,50 +113,50 @@ public class BiologicalParkTicketSystem extends Application {
 ////        courseManager.clearCalculatedCourses();
 ////        System.out.println(courseManager.toString());
 //        
-////        Client companyData = new Client(
-////                config.getProperties().get("company.name").toString(),
-////                config.getProperties().get("company.nif").toString()
-////        );
-////        Client.Address companyAddress = companyData.new Address(
-////                config.getProperties().get("company.address.adress").toString(),
-////                config.getProperties().get("company.address.postal_code").toString(),
-////                config.getProperties().get("company.address.location").toString(),
-////                config.getProperties().get("company.address.country").toString()
-////        );
-////        companyData.setAddress(companyAddress);
-////        
-////        Client client = new Client("Edgar Santos", "267400292");
-////        Client.Address clientAddress = client.new Address("Est. da Charneca", "2665-506", "Venda do Pinheiro", "Portugal");
-////        client.setAddress(clientAddress);
-////        
-////        DaoManager daoManager = DaoManager.getInstance();
-////        daoManager.init(config);
-//
-////        DocumentManager documentManager = new DocumentManager(config.getProperties().getProperty("documents.folder"), companyData, Double.parseDouble(config.getProperties().get("documents.vat").toString()));
-////        documentManager.generateDocuments(courseManager.getCalculatedPath(), client);
-//        //documentManager.generateDocuments(courseManager.getCalculatedPath(), null);
+//        Client companyData = new Client(
+//                config.getProperties().get("company.name").toString(),
+//                config.getProperties().get("company.nif").toString()
+//        );
+//        Client.Address companyAddress = companyData.new Address(
+//                config.getProperties().get("company.address.adress").toString(),
+//                config.getProperties().get("company.address.postal_code").toString(),
+//                config.getProperties().get("company.address.location").toString(),
+//                config.getProperties().get("company.address.country").toString()
+//        );
+//        companyData.setAddress(companyAddress);
 //        
-////        for (Ticket ticket : daoManager.getTicketDao().selectTickets()) {
-////            System.out.println(ticket);
-////        }
+//        Client client = new Client("Edgar Santos", "267400292");
+//        Client.Address clientAddress = client.new Address("Est. da Charneca", "2665-506", "Venda do Pinheiro", "Portugal");
+//        client.setAddress(clientAddress);
 //        
-////        for (Invoice invoice : daoManager.getInvoiceDao().selectInvoices()) {
-////            System.out.println(invoice);
-////        }
+//        DaoManager daoManager = DaoManager.getInstance();
+//        daoManager.init(config);
 //
-////        System.out.println("Sold Bike Tickets: " + daoManager.getStatisticsDao().getSoldBikeTickets());
-////        System.out.println("Sold Foot Tickets: " + daoManager.getStatisticsDao().getSoldFootTickets());
-////        System.out.println("Sold Tickets Price Average: " + daoManager.getStatisticsDao().getSoldTicketsPriceAverage());
-////        System.out.println("Top 10 Visited Pois:");
-////        int count = 0;
-////        for (int poiId : daoManager.getStatisticsDao().getTop10VisitedPois().keySet()) {
-////            try {
-////                PointOfInterest poi = mapManager.getPointOfInterestById(poiId);
-////                System.out.println("\t" + ++count + " - Name: " + poi.getPoiName() + "; Visits: " + daoManager.getStatisticsDao().getTop10VisitedPois().get(poiId));
-////            } catch (MapManagerException ex) {
-////                LoggerManager.getInstance().log(ex);
-////            }
-////        }
+//        DocumentManager documentManager = new DocumentManager(config.getProperties().getProperty("documents.folder"), companyData, Double.parseDouble(config.getProperties().get("documents.vat").toString()));
+//        documentManager.generateDocuments(courseManager.getCalculatedPath(), client);
+//        documentManager.generateDocuments(courseManager.getCalculatedPath(), null);
+//        
+//        for (Ticket ticket : daoManager.getTicketDao().selectTickets()) {
+//            System.out.println(ticket);
+//        }
+//        
+//        for (Invoice invoice : daoManager.getInvoiceDao().selectInvoices()) {
+//            System.out.println(invoice);
+//        }
+//
+//        System.out.println("Sold Bike Tickets: " + daoManager.getStatisticsDao().getSoldBikeTickets());
+//        System.out.println("Sold Foot Tickets: " + daoManager.getStatisticsDao().getSoldFootTickets());
+//        System.out.println("Sold Tickets Price Average: " + daoManager.getStatisticsDao().getSoldTicketsPriceAverage());
+//        System.out.println("Top 10 Visited Pois:");
+//        int count = 0;
+//        for (int poiId : daoManager.getStatisticsDao().getTop10VisitedPois().keySet()) {
+//            try {
+//                PointOfInterest poi = mapManager.getPointOfInterestById(poiId);
+//                System.out.println("\t" + ++count + " - Name: " + poi.getPoiName() + "; Visits: " + daoManager.getStatisticsDao().getTop10VisitedPois().get(poiId));
+//            } catch (MapManagerException ex) {
+//                LoggerManager.getInstance().log(ex);
+//            }
+//        }
     }
     
 }

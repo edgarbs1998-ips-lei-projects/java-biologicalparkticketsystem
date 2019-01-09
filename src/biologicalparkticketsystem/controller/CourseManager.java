@@ -28,21 +28,22 @@ public class CourseManager {
           *
           * @return the type of unit that is used for cost and distance, by default is "Unknown"
           */
-         public String getUnit() {
+        public String getUnit() {
             switch (this) {
                 case COST: return "€";
                 case DISTANCE: return "Meters";
             }
             return "Unknown";
         }
-         
-         public String getName() {
-             switch (this) {
-                 case COST: return "Cost";
-                 case DISTANCE: return "Distance";
-             }
-             return "Unknown";
-         }
+        
+        @Override
+        public String toString() {
+            switch (this) {
+                case COST: return "Cost";
+                case DISTANCE: return "Distance";
+            }
+            return "Unknown";
+        }
     };
     
     private final MapManager mapManager;
@@ -70,6 +71,10 @@ public class CourseManager {
     public void clearCalculatedCourses() {
         this.calculatedPathCareTaker.clearStates();
         this.calculatedPath = null;
+    }
+    
+    public int getUndoCalculatedCourses() {
+        return this.calculatedPathCareTaker.countStates();
     }
     
     /**

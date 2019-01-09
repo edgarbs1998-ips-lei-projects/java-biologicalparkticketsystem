@@ -174,18 +174,20 @@ public class InvoiceDAOSqlLite implements IInvoiceDAO {
         
         sql = "INSERT INTO Client (uid, name, nif, address, postalCode, location, country) VALUES (?, ?, ?, ?, ?, ?, ?)";
         Client client = invoice.getClient();
-        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
-            pstmt.setString(1, invoice.getUid());
-            pstmt.setString(2, client.getName());
-            pstmt.setString(3, client.getNif());
-            pstmt.setString(4, client.getAddress().getAddress());
-            pstmt.setString(5, client.getAddress().getPostalCode());
-            pstmt.setString(6, client.getAddress().getLocation());
-            pstmt.setString(7, client.getAddress().getCountry());
-            pstmt.executeUpdate();
-        } catch (SQLException ex) {
-            LoggerManager.getInstance().log(ex);
-            return false;
+        if (client != null) {
+            try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+                pstmt.setString(1, invoice.getUid());
+                pstmt.setString(2, client.getName());
+                pstmt.setString(3, client.getNif());
+                pstmt.setString(4, client.getAddress().getAddress());
+                pstmt.setString(5, client.getAddress().getPostalCode());
+                pstmt.setString(6, client.getAddress().getLocation());
+                pstmt.setString(7, client.getAddress().getCountry());
+                pstmt.executeUpdate();
+            } catch (SQLException ex) {
+                LoggerManager.getInstance().log(ex);
+                return false;
+            }
         }
         
         return true;
