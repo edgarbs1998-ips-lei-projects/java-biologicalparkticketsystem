@@ -6,6 +6,7 @@
 package biologicalparkticketsystem.view;
 
 import biologicalparkticketsystem.controller.ConfigManager;
+import biologicalparkticketsystem.controller.CourseManager;
 import biologicalparkticketsystem.controller.LoggerManager;
 import biologicalparkticketsystem.controller.MapManager;
 import biologicalparkticketsystem.controller.MapManagerException;
@@ -14,16 +15,23 @@ import biologicalparkticketsystem.model.PointOfInterest;
 import digraph.IVertex;
 import graphview.CircularSortedPlacementStrategy;
 import graphview.GraphPanel;
+import graphview.RandomPlacementStrategy;
 import graphview.VertexPlacementStrategy;
+import java.util.ArrayList;
+import java.util.List;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
@@ -45,9 +53,10 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
     private ToggleGroup group;
     private RadioButton rbFoot, rbBicycle;
     private ComboBox PathComboBox;
-    private Button payBtn, calculateBtn;
+    private Button payBtn, calculateBtn, statisticsBtn;
     private Label POITitle, pathTypeTitle;
-    
+    private List<Integer> selectedPOI = new ArrayList<>();
+    public int index;
     
     public BiologicalParkTicketSystemUI(){
         innitComponents();
@@ -60,10 +69,11 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
         
         LoggerManager logger = LoggerManager.getInstance();
         logger.init();
-        
         MapManager mapManager;
         try {
             mapManager = new MapManager(config.getProperties().getProperty("map.file"));
+            CourseManager courseManager = new CourseManager(mapManager);
+            
         } catch (MapManagerException ex) {
             LoggerManager.getInstance().log(ex);
             return;
@@ -94,10 +104,28 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
         POITitle = new Label("Points of Interest");
         POITitle.setStyle("-fx-font-weight: bold");
         rightMenu.getChildren().add(POITitle);
+        ListView<String> list = new ListView<>();
+        index = 0;
         //make foreach to get all points of interest and add radio buttons ofr eahc point
         for(IVertex<PointOfInterest> v : mapManager.getDiGraph().vertices()){
+            //cant create dynamic variables
             CheckBox  checkBox = new CheckBox (v.element().toString());
+            //CheckBox checkbox = (CheckBox)rightMenu.getChildren().get(index + 4); TEST
+            checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    // TODO Auto-generated method stub
+                    if(newValue){
+                        selectedPOI.add(v.element().getPoiId());
+                        System.out.println("tick" + selectedPOI.size());
+
+                    }else{
+                        selectedPOI.remove(index);
+                        System.out.println("untick" + selectedPOI.size());
+                    }
+                }
+            });
             rightMenu.getChildren().add(checkBox);
+            index++;
         }
         //bottom buttons container
         bottomMenu = new HBox();
@@ -113,13 +141,25 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
             paymentStage.setTitle("Issue ticket");
             paymentStage.setScene(new Scene(root, 400, 300));
             paymentStage.show();
-            //System.out.println("Button Action");
+        });
+        
+        statisticsBtn = new Button("Statistics");
+        statisticsBtn.setOnAction((event) -> {
+            StatisticsUI statisticsWindow = new StatisticsUI();
+            BorderPane root = new BorderPane();
+            root.setCenter(statisticsWindow.getChart());
+            root.setPadding(new Insets(20));
+            Stage statisticsStage = new Stage();
+            statisticsStage.setTitle("Statistics");
+            statisticsStage.setScene(new Scene(root, 400, 300));
+            statisticsStage.show();
         });
         calculateBtn = new Button("Calculate"); // TODO Displaye error message to user on error
+        
         ObservableList<String> options = FXCollections.observableArrayList("Shortest","Cheapest","Most visited");
         PathComboBox = new ComboBox(options);
         PathComboBox.setValue("Path");
-        bottomMenu.getChildren().addAll(PathComboBox, calculateBtn, payBtn);
+        bottomMenu.getChildren().addAll(PathComboBox, calculateBtn, statisticsBtn, payBtn);
         bottomMenu.setAlignment(Pos.CENTER_LEFT);
         bottomMenu.setSpacing(10);
     }

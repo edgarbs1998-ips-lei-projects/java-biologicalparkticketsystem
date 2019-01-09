@@ -1,18 +1,6 @@
 package biologicalparkticketsystem;
 
-import biologicalparkticketsystem.controller.ConfigManager;
-import biologicalparkticketsystem.controller.CourseManager;
-import biologicalparkticketsystem.controller.CourseManagerException;
-import biologicalparkticketsystem.controller.DaoManager;
-import biologicalparkticketsystem.controller.DocumentManager;
-import biologicalparkticketsystem.controller.LoggerManager;
-import biologicalparkticketsystem.controller.MapManager;
-import biologicalparkticketsystem.controller.MapManagerException;
-import biologicalparkticketsystem.model.Client;
-import biologicalparkticketsystem.model.PointOfInterest;
 import biologicalparkticketsystem.view.BiologicalParkTicketSystemUI;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -78,8 +66,8 @@ public class BiologicalParkTicketSystem extends Application {
 //            mustVisitPois.add(poi8);
 //            PointOfInterest poi4 = mapManager.getPointOfInterestById(4);
 //            mustVisitPois.add(poi4);
-////            PointOfInterest poi6 = mapManager.getPointOfInterestById(6);
-////            mustVisitPois.add(poi6);
+//            PointOfInterest poi6 = mapManager.getPointOfInterestById(6);
+//            mustVisitPois.add(poi6);
 //            PointOfInterest poi7 = mapManager.getPointOfInterestById(7);
 //            mustVisitPois.add(poi7);
 //        } catch (MapManagerException ex) {

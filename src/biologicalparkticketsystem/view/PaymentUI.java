@@ -94,7 +94,7 @@ public class PaymentUI implements PaymentInterface{
         
         //button menu
         buttonMenu = new HBox();
-        payBtn = new Button("Payment");
+        payBtn = new Button("Buy ticket");
         
         payBtn.setOnAction((event) -> {
             Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -103,52 +103,22 @@ public class PaymentUI implements PaymentInterface{
             alert.setContentText("Do you want to use your NIF?");
             Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK){
-                    GridPane grid = new GridPane();
-                    grid.setAlignment(Pos.CENTER);
-                    grid.setHgap(10);
-                    grid.setVgap(10);
-                    grid.setPadding(new Insets(25, 25, 25, 25));
-                    
-                    Text scenetitle = new Text("Client Form");
-                    scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-                    grid.add(scenetitle, 0, 0, 2, 1);
-
-                    Label userName = new Label("Name: ");
-                    grid.add(userName, 0, 1);
-
-                    TextField userTextField = new TextField();
-                    grid.add(userTextField, 1, 1);
-
-                    Label idNumber = new Label("ID number:");
-                    grid.add(idNumber, 0, 2);
-
-                    TextField idNumberTextField = new TextField();
-                    grid.add(idNumberTextField, 1, 3);
-                    
-                    Label FiscalNumber = new Label("Fiscal number:");
-                    grid.add(FiscalNumber, 0, 3);
-
-                    TextField FiscalNumberTextField = new TextField();
-                    grid.add(FiscalNumberTextField, 1, 2);
-                    
-                    Button btn = new Button("Sign in");
-                    HBox hbBtn = new HBox(10);
-                    hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-                    hbBtn.getChildren().add(btn);
-                    grid.add(hbBtn, 1, 4);
-                    
-                    Scene scene = new Scene(grid, 300, 275);
+                    ClientFormUI clientForm = new ClientFormUI();
+                    Scene scene = new Scene(clientForm.getGrid(), 300, 275);
                     Stage stage = new Stage();
                     stage.setScene(scene);
+                    stage.setTitle("Client form");
                     stage.show();
                     
                 } else {
                     
                 }
-                
-                // TODO After ticket generation CourseManager.clearCalculatedCourses
         });
         backBtn = new Button("Back");
+        backBtn.setOnAction((event) ->{
+            Stage stage = (Stage) backBtn.getScene().getWindow();
+            stage.close();
+        });
         buttonMenu.getChildren().addAll(backBtn, payBtn);
         
         buttonMenu.setSpacing(30);
