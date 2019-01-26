@@ -155,9 +155,12 @@ public class StatisticsDAOSerialization implements IStatisticsDAO {
     public Map<PointOfInterest, Integer> getTop10VisitedPois() {
         Statistics statistics = getStatistics();
         Map<Integer, Integer> totalPoisVisits = statistics.getTotalPoisVisits();
-        
-        // TODO Improve code
         Map<PointOfInterest, Integer> newTotalPoisVisits = new HashMap<>();
+        
+        if (totalPoisVisits == null) {
+            return newTotalPoisVisits;
+        }
+        
         for (int poiId : totalPoisVisits.keySet()) {
             try {
                 PointOfInterest poi = mapManager.getPointOfInterestById(poiId);
