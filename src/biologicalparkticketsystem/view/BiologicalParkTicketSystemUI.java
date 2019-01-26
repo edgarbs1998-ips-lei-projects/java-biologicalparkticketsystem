@@ -93,7 +93,7 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
         logger.init();
         
         try {
-            mapManager = new MapManager(config.getProperties().getProperty("map.file"));
+            mapManager = new MapManager(config.getProperties().getProperty("map"));
         } catch (MapManagerException ex) {
             LoggerManager.getInstance().log(ex);
             return;

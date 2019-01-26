@@ -40,7 +40,7 @@ public class StatisticsDAOSerialization implements IStatisticsDAO {
         this.mapManager = mapManager;
         
         ConfigManager config = ConfigManager.getInstance();
-        this.mapName = config.getProperties().getProperty("map.name");
+        this.mapName = config.getProperties().getProperty("map");
         
         this.basePath = basePath;
         

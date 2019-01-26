@@ -5,6 +5,7 @@
  */
 package biologicalparkticketsystem.controller;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
 public class ConfigManager {
     private static ConfigManager instance = new ConfigManager(); 
     
-    private static final String CONFIG_FILE_PATH = "config.properties";
+    private static final String CONFIG_FILE_PATH = "./config.properties";
     
     private Properties properties;
     
@@ -30,13 +31,9 @@ public class ConfigManager {
         InputStream inputStream = null;
                 
         try {
-            inputStream = getClass().getClassLoader().getResourceAsStream(CONFIG_FILE_PATH);
+            inputStream = new FileInputStream(CONFIG_FILE_PATH);
             
-            if (inputStream != null) {
-                properties.load(inputStream);
-            } else {
-                throw new FileNotFoundException("property file '" + CONFIG_FILE_PATH + "' not found in the classpath");
-            }
+            properties.load(inputStream);
         } catch (IOException ex) {
             Logger.getGlobal().log(Level.SEVERE, null, ex);
         } finally {
@@ -55,9 +52,6 @@ public class ConfigManager {
     } 
     
     public Properties getProperties() {
-//        if (this.properties.isEmpty()) {
-//            throw new RuntimeException("config properties file is empty");
-//        }
         return this.properties;
     }
 }

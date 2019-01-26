@@ -38,7 +38,7 @@ public class StatisticsDAOSqlLite implements IStatisticsDAO {
         this.mapManager = mapManager;
         
         ConfigManager config = ConfigManager.getInstance();
-        this.mapName = config.getProperties().getProperty("map.name");
+        this.mapName = config.getProperties().getProperty("map");
         
         // Create the path folder if it does not exists
         if (!dbFile.equals("")) {
