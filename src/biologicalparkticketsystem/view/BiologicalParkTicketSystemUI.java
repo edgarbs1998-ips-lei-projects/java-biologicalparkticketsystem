@@ -36,6 +36,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -47,6 +48,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -61,13 +63,13 @@ import javafx.stage.Stage;
 public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemInterface{
     //Layouts
     private GraphPanel<PointOfInterest, Connection> graphView;
-    private VBox rightMenu;
+    private VBox rightMenu, poiVBox;
     private HBox bottomMenu;
     
     //Components
     private ToggleGroup group;
     private RadioButton rbFoot, rbBicycle;
-    private ComboBox PathComboBox;
+    private ComboBox pathComboBox;
     private Button payBtn, calculateBtn, statisticsBtn, undoBtn;
     private Label POITitle, pathTypeTitle, costLabel, costLabelValue, distanceLabel, distanceLabelValue;
     //private List<Integer> selectedPOI = new ArrayList<>();
@@ -155,7 +157,7 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
         typeVBox.setSpacing(20);
         rightMenu.getChildren().add(typeVBox);
         
-        VBox poiVBox = new VBox();
+        poiVBox = new VBox();
         POITitle = new Label("Points of Interest");
         POITitle.setStyle("-fx-font-weight: bold");
         poiVBox.getChildren().add(POITitle);
@@ -216,9 +218,9 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
             }
         });
         
-        calculateBtn = new Button("Calculate"); // TODO Displaye error message to user on error
+        calculateBtn = new Button("Calculate");
         calculateBtn.setOnAction((event) -> {
-            CourseManager.Criteria criteria = (CourseManager.Criteria) PathComboBox.getSelectionModel().getSelectedItem();
+            CourseManager.Criteria criteria = (CourseManager.Criteria) pathComboBox.getSelectionModel().getSelectedItem();
             
             boolean navigability = (!((RadioButton )group.getSelectedToggle()).getText().equals("Foot"));
             
@@ -270,9 +272,9 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
         Label criteriaLabel = new Label("Criteria:");
         criteriaLabel.setStyle("-fx-font-weight: bold");
         ObservableList<CourseManager.Criteria> options = FXCollections.observableArrayList(CourseManager.Criteria.COST, CourseManager.Criteria.DISTANCE);
-        PathComboBox = new ComboBox(options);
-        PathComboBox.setValue(CourseManager.Criteria.COST);
-        criteriaHBox.getChildren().addAll(criteriaLabel, PathComboBox);
+        pathComboBox = new ComboBox(options);
+        pathComboBox.setValue(CourseManager.Criteria.COST);
+        criteriaHBox.getChildren().addAll(criteriaLabel, pathComboBox);
         criteriaHBox.setAlignment(Pos.CENTER_LEFT);
         criteriaHBox.setSpacing(5);
         
@@ -292,12 +294,26 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
         alertFinish.setContentText("Your ticket has been issued!");
         alertFinish.show();
 
+        resetOptions();
+    }
+    
+    public void resetOptions() {
         courseManager.clearCalculatedCourses();
         resetColors();
+        pathComboBox.setValue(CourseManager.Criteria.COST);
         payBtn.setDisable(true);
         undoBtn.setDisable(true);
         costLabelValue.textProperty().setValue("0");
         distanceLabelValue.textProperty().setValue("0");
+        for (Toggle toggle : group.getToggles()) {
+            toggle.setSelected(false);
+        }
+        rbFoot.setSelected(true);
+        for (Node node : poiVBox.getChildren()) {
+            if (node instanceof CheckBox) {
+                ((CheckBox) node).setSelected(false);
+            }
+        }
     }
     
     public void updateCosts() {
