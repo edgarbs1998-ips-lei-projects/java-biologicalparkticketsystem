@@ -213,7 +213,7 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
             updateColors();
             updateCosts();
             
-            if (courseManager.getUndoCalculatedCourses() == 0) {
+            if (courseManager.countCalculatedCourses() == 0) {
                 undoBtn.setDisable(true);
             }
         });
@@ -227,8 +227,6 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
             try {
                 courseManager.minimumCriteriaPath(criteria, navigability, this.selectedPois);
             } catch (CourseManagerException ex) {
-                LoggerManager.getInstance().log(ex);
-                
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle ("An error has occured while calculating the course");
                 alert.setHeaderText(null);
@@ -242,7 +240,7 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
             updateColors();
             
             payBtn.setDisable(false);
-            if (courseManager.getUndoCalculatedCourses() > 0) {
+            if (courseManager.countCalculatedCourses() > 0) {
                 undoBtn.setDisable(false);
             }
             

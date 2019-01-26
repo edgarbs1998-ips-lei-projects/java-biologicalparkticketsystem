@@ -73,7 +73,7 @@ public class CourseManager {
         this.calculatedPath = null;
     }
     
-    public int getUndoCalculatedCourses() {
+    public int countCalculatedCourses() {
         return this.calculatedPathCareTaker.countStates();
     }
     
@@ -84,7 +84,7 @@ public class CourseManager {
      * @param mustVisitPois
      * @return success
      */
-    public boolean minimumCriteriaPath(Criteria criteria,
+    public void minimumCriteriaPath(Criteria criteria,
             boolean navigability,
             List<PointOfInterest> mustVisitPois) throws CourseManagerException {
         
@@ -92,11 +92,9 @@ public class CourseManager {
             throw new CourseManagerException("To generate a path a minimum of one point of interest must be selected");
         }
         
+        CalculatedPath oldCalculatedPath = this.calculatedPath;
+        
         try {
-            if (this.calculatedPath != null) {
-                this.calculatedPathCareTaker.saveState(this.calculatedPath);
-            }
-            
             this.calculatedPath = new CalculatedPath();
 
             IVertex<PointOfInterest> startPoi = this.mapManager.checkPointOfInterest(this.mapManager.getStartPoint());
@@ -115,14 +113,16 @@ public class CourseManager {
             this.calculatedPath.setNavigability(navigability);
             this.calculatedPath.setMustVisit(mustVisitPois);
             
+            if (oldCalculatedPath != null) {
+                this.calculatedPathCareTaker.saveState(oldCalculatedPath);
+            }
+            
             LoggerManager.getInstance().log(LoggerManager.Component.COURSE_CALCULATIONS);
-        } catch (MapManagerException ex) {
+        } catch (MapManagerException | CourseManagerException ex) {
             LoggerManager.getInstance().log(ex);
-            this.calculatedPath = null;
-            return false;
+            this.calculatedPath = oldCalculatedPath;
+            throw new CourseManagerException(ex.getMessage());
         }
-        
-        return true;
     }
     
     private void heapsAlgorithm(int n, List<PointOfInterest> mustVisitPois,

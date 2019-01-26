@@ -70,16 +70,23 @@ public class CalculatedPath {
     }
     
     public CalculatedPathMemento createMomento() {
-        return new CalculatedPathMemento(criteria, navigability, cost, pointsOfInterest, connections, mustVisit);
+        return new CalculatedPathMemento(
+                this.criteria,
+                this.navigability,
+                this.cost,
+                this.pointsOfInterest,
+                this.connections,
+                this.mustVisit
+        );
     }
     
     public void setMemento(CalculatedPathMemento memento) {
-        criteria = memento.getMementoCriteria();
-        navigability = memento.getMementoNavigability();
-        cost = memento.getMementoCost();
-        pointsOfInterest = memento.getMementoPointsOfInterest();
-        connections = memento.getMementoConnections();
-        mustVisit = memento.getMementoMustVisit();
+        this.criteria = memento.getMementoCriteria();
+        this.navigability = memento.getMementoNavigability();
+        this.cost = memento.getMementoCost();
+        this.pointsOfInterest = memento.getMementoPointsOfInterest();
+        this.connections = memento.getMementoConnections();
+        this.mustVisit = memento.getMementoMustVisit();
     }
     
 }
