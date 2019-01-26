@@ -100,6 +100,7 @@ public class StatisticsUI extends TabPane {
         
         tabOthers.setContent(averageCostHBox);
         
+        setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         getTabs().addAll(tabChart, tabBarChart, tabOthers);
     }
 }
