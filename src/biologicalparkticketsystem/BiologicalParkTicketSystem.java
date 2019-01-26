@@ -1,19 +1,10 @@
 package biologicalparkticketsystem;
 
-import biologicalparkticketsystem.controller.DaoManager;
-import biologicalparkticketsystem.controller.DocumentManager;
-import biologicalparkticketsystem.controller.MapManagerException;
-import biologicalparkticketsystem.model.Client;
-import biologicalparkticketsystem.model.Invoice;
-import biologicalparkticketsystem.model.PointOfInterest;
-import biologicalparkticketsystem.model.Ticket;
 import biologicalparkticketsystem.view.BiologicalParkTicketSystemUI;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 /**
@@ -32,11 +23,6 @@ public class BiologicalParkTicketSystem extends Application {
         root.setBottom(view.getbottomMenu());
         root.setRight(view.getRightMenu());
         root.setPadding(new Insets(10));
-        
-//        HBox root = new HBox();
-//        root.getChildren().add(view.getGraphView());
-//        root.getChildren().add(view.getbottomMenu());
-//        root.getChildren().add(view.getRightMenu());
         
         //scene
         Scene scene = new Scene(root, 800, 600);

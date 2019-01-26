@@ -1,66 +1,48 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package biologicalparkticketsystem.view;
 
-import biologicalparkticketsystem.controller.ConfigManager;
-import biologicalparkticketsystem.controller.CourseManager;
-import biologicalparkticketsystem.controller.CourseManagerException;
-import biologicalparkticketsystem.controller.DaoManager;
-import biologicalparkticketsystem.controller.DocumentManager;
-import biologicalparkticketsystem.controller.LoggerManager;
-import biologicalparkticketsystem.controller.MapManager;
-import biologicalparkticketsystem.controller.MapManagerException;
-import biologicalparkticketsystem.model.Client;
-import biologicalparkticketsystem.model.Connection;
-import biologicalparkticketsystem.model.PointOfInterest;
-import com.itextpdf.layout.borders.Border;
+import biologicalparkticketsystem.ConfigManager;
+import biologicalparkticketsystem.model.course.CourseManager;
+import biologicalparkticketsystem.model.course.CourseManagerException;
+import biologicalparkticketsystem.DaoManager;
+import biologicalparkticketsystem.model.document.DocumentManager;
+import biologicalparkticketsystem.LoggerManager;
+import biologicalparkticketsystem.model.course.MapManager;
+import biologicalparkticketsystem.model.course.MapManagerException;
+import biologicalparkticketsystem.model.document.Client;
+import biologicalparkticketsystem.model.course.Connection;
+import biologicalparkticketsystem.model.course.PointOfInterest;
 import digraph.IEdge;
 import digraph.IVertex;
 import graphview.CircularSortedPlacementStrategy;
 import graphview.GraphPanel;
-import graphview.RandomPlacementStrategy;
 import graphview.VertexPlacementStrategy;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-/**
- *
- * @author Luis Varela
- */
-public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemInterface{
+public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemInterface {
+    
     //Layouts
     private GraphPanel<PointOfInterest, Connection> graphView;
     private VBox rightMenu, poiVBox;
@@ -371,4 +353,5 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
     public HBox getbottomMenu(){
         return this.bottomMenu;
     }
+    
 }

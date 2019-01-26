@@ -1,6 +1,9 @@
 package biologicalparkticketsystem.model;
 
-import biologicalparkticketsystem.controller.CourseManager;
+import biologicalparkticketsystem.model.course.CourseManager;
+import biologicalparkticketsystem.model.course.ConnectionBridge;
+import biologicalparkticketsystem.model.course.Connection;
+import biologicalparkticketsystem.model.course.PointOfInterest;
 import java.nio.file.FileSystems;
 import java.util.List;
 import org.junit.Before;

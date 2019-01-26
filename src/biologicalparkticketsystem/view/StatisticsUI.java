@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package biologicalparkticketsystem.view;
 
-import biologicalparkticketsystem.controller.DaoManager;
-import biologicalparkticketsystem.model.PointOfInterest;
+import biologicalparkticketsystem.DaoManager;
+import biologicalparkticketsystem.model.course.PointOfInterest;
 import java.util.Map;
 import java.util.Optional;
 import javafx.collections.FXCollections;
@@ -25,10 +20,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
-/**
- *
- * @author Luis Varela
- */
 public class StatisticsUI extends TabPane {
     
     final private PieChart chart;
@@ -103,4 +94,5 @@ public class StatisticsUI extends TabPane {
         setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         getTabs().addAll(tabChart, tabBarChart, tabOthers);
     }
+    
 }

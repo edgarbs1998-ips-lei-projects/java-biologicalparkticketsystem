@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package biologicalparkticketsystem.view;
 
-import biologicalparkticketsystem.model.Client;
+import biologicalparkticketsystem.model.document.Client;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -16,10 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
-/**
- *
- * @author goldspy98
- */
 public class ClientDialogUI extends Dialog<Client> {
     
     public ClientDialogUI () {
@@ -89,4 +80,5 @@ public class ClientDialogUI extends Dialog<Client> {
             return null;
         });
     }
+    
 }
