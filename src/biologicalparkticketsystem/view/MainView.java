@@ -53,8 +53,6 @@ public class MainView implements IMainView {
     private MainModel mainModel;
     
     public MainView(MainModel model) {
-        super();
-        
         this.pointsOfInterestCheckBoxes = new HashMap<>();
         this.mainModel = model;
         

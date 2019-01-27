@@ -1,14 +1,20 @@
 package biologicalparkticketsystem.controller;
 
+import biologicalparkticketsystem.LoggerManager;
 import biologicalparkticketsystem.model.MainModel;
+import biologicalparkticketsystem.model.StatisticsModel;
 import biologicalparkticketsystem.model.course.CourseManager;
 import biologicalparkticketsystem.model.course.CourseManagerException;
 import biologicalparkticketsystem.model.course.PointOfInterest;
 import biologicalparkticketsystem.model.document.Client;
 import biologicalparkticketsystem.view.ClientDialog;
 import biologicalparkticketsystem.view.IMainView;
+import biologicalparkticketsystem.view.IStatisticsView;
+import biologicalparkticketsystem.view.StatisticsView;
 import digraph.IVertex;
+import javafx.scene.Scene;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 
 public class MainController {
     
@@ -23,13 +29,16 @@ public class MainController {
     }
     
     public void openStatistics() {
-//        LoggerManager.getInstance().log(LoggerManager.Component.STATISTICS_CHECKS);
-//            
-//        StatisticsUI statisticsWindow = new StatisticsUI();
-//        Stage statisticsStage = new Stage();
-//        statisticsStage.setTitle("Statistics");
-//        statisticsStage.setScene(new Scene(statisticsWindow, 600, 400));
-//        statisticsStage.show();
+        LoggerManager.getInstance().log(LoggerManager.Component.STATISTICS_CHECKS);
+        
+        StatisticsModel statisticsModel = new StatisticsModel();
+        IStatisticsView statisticsView = new StatisticsView(statisticsModel);
+        
+        Stage statisticsStage = new Stage();
+        statisticsStage.setTitle("Statistics");
+        Scene scene = statisticsView.getScene();
+        statisticsStage.setScene(scene);
+        statisticsStage.show();
     }
     
     public void changePointOfInterest(IVertex<PointOfInterest> poi, boolean oldValue, boolean newValue) {

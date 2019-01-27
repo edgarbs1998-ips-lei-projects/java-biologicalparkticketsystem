@@ -16,7 +16,10 @@ public class BiologicalParkTicketSystem extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        IMainView view = createMainApp();
+        MainModel model = new MainModel();
+        IMainView view = new MainView(model);
+        MainController controller = new MainController(model, view);
+        
         primaryStage.setTitle("Biological Park");
         Scene scene = view.getScene();
         primaryStage.setScene(scene);
@@ -31,13 +34,6 @@ public class BiologicalParkTicketSystem extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-    }
-    
-    private IMainView createMainApp() {
-        MainModel model = new MainModel();
-        IMainView view = new MainView(model);
-        MainController controller = new MainController(model, view);
-        return view;
     }
     
 }
