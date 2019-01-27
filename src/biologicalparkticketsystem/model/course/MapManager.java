@@ -119,7 +119,7 @@ public class MapManager {
             this.startPoint = loadedPOIs.entrySet().iterator().next().getValue();
         } catch (FileNotFoundException ex) {
             throw new MapManagerException("Specified park map file not found (" + ex.getMessage() + ")");
-        } catch (Exception ex) {
+        } catch (MapManagerException | NumberFormatException ex) {
             throw new MapManagerException(ex.getMessage());
         }
     }
@@ -142,7 +142,6 @@ public class MapManager {
     }
     
     public IVertex<PointOfInterest> checkPointOfInterest(PointOfInterest poi) throws MapManagerException {
-        
         if( poi == null) {
             throw new MapManagerException("Point of interest cannot be null");
         }
@@ -186,7 +185,6 @@ public class MapManager {
      * @throws MapManagerException
      */
     private void addConnection(PointOfInterest poi1, PointOfInterest poi2, Connection connection) throws MapManagerException {
-        
         if( connection == null) {
             throw new MapManagerException("Connection is null");
         }
@@ -212,7 +210,6 @@ public class MapManager {
      * @throws MapManagerException
      */
     private List<Connection> getConnectionsBetween(PointOfInterest poi1, PointOfInterest poi2) throws MapManagerException {
-        
         List<Connection> connectionList = new ArrayList<>();
         
         IVertex<PointOfInterest> p1 = checkPointOfInterest(poi1);

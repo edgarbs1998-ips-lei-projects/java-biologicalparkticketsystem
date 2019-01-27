@@ -8,10 +8,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-/**
- *
- * @author maasbs
- */
 public class BiologicalParkTicketSystem extends Application {
     
     @Override

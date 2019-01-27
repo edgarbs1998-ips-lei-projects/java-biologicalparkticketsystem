@@ -12,7 +12,12 @@ public class CalculatedPathMemento {
     private final List<Connection> mementoConnections;
     private final List<PointOfInterest> mementoMustVisit;
     
-    public CalculatedPathMemento(ICriteriaStrategy criteria, boolean navigability, int cost, List<PointOfInterest> pointsOfInterest, List<Connection> connections, List<PointOfInterest> mustVisit) {
+    public CalculatedPathMemento(
+            ICriteriaStrategy criteria,
+            boolean navigability, int cost,
+            List<PointOfInterest> pointsOfInterest,
+            List<Connection> connections,
+            List<PointOfInterest> mustVisit) {
         this.mementoCriteria = criteria;
         this.mementoNavigability = navigability;
         this.mementoCost = cost;
