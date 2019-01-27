@@ -4,23 +4,21 @@ import biologicalparkticketsystem.model.document.Client;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
-public class ClientDialogUI extends Dialog<Client> {
+public class ClientDialog extends Dialog<Client> {
     
-    public ClientDialogUI () {
+    public ClientDialog () {
         // Create the custom dialog
         setTitle("Client Form");
         setHeaderText("Input your information for the invoice");
         
         // Set the button types
-        ButtonType confirmButtonType = new ButtonType("Confirm", ButtonData.OK_DONE);
-        getDialogPane().getButtonTypes().addAll(confirmButtonType, ButtonType.CANCEL);
+        getDialogPane().getButtonTypes().addAll(ButtonType.NEXT, ButtonType.CANCEL);
         
         // Create the username and password labels and fields
         GridPane grid = new GridPane();
@@ -55,22 +53,23 @@ public class ClientDialogUI extends Dialog<Client> {
         grid.add(country, 1, 5);
         
         // Enable/Disable confirm button depending on whether a username was entered
-        Node confirmButton = getDialogPane().lookupButton(confirmButtonType);
+        Node confirmButton = getDialogPane().lookupButton(getDialogPane().getButtonTypes().get(0));
         confirmButton.setDisable(true);
         
-        // Do some validation (using the Java 8 lambda syntax).
+        // Do some validation (using the Java 8 lambda syntax)
         nif.textProperty().addListener((observable, oldValue, newValue) -> {
             confirmButton.setDisable(newValue.trim().isEmpty());
         });
         
         getDialogPane().setContent(grid);
         
-        // Request focus on the username field by default.
+        // Request focus on the username field by default
         Platform.runLater(() -> nif.requestFocus());
         
-        // Convert the result to a username-password-pair when the login button is clicked.
+        // Convert the result to a username-password-pair when the login button is clicked
         setResultConverter(dialogButton -> {
-            if (dialogButton == confirmButtonType) {
+            if (dialogButton == ButtonType.NEXT) {
+                // TODO MVC
                 Client client = new Client(name.getText(), nif.getText());
                 Client.Address clientAddress = client.new Address(address.getText(), postalCode.getText(), location.getText(), country.getText());
                 client.setAddress(clientAddress);

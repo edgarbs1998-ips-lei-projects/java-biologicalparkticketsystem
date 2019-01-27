@@ -15,7 +15,8 @@ public class ConnectionBridge extends Connection {
     
     @Override
     public String toString() {
-        return this.getConnectionName();
+        return String.format("%s {bridge, %dm, €%d%s}",
+                getConnectionName(), getDistance(), getCostEuros(), (getNavigability() ? ", bicycle" : ""));
     }
     
 }

@@ -176,7 +176,7 @@ public class BiologicalParkTicketSystemUI implements BiologicalParkTicketSystemI
             alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
             alert.showAndWait().ifPresent(type -> {
                 if (type == ButtonType.YES) {
-                    Optional<Client> result = new ClientDialogUI().showAndWait();
+                    Optional<Client> result = new ClientDialog().showAndWait();
 
                     result.ifPresent(client -> {
                         generateDocuments(client);

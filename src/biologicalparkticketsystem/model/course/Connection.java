@@ -26,22 +26,6 @@ public class Connection {
         this.navigability = navigability;
         
     }
-
-    /**
-     *
-     * @return connection distance
-     */
-    public int getDistance() {
-        return this.distance;
-    }
-
-    /**
-     *
-     * @return connection cost
-     */
-    public int getCostEuros() {
-        return this.cost;
-    }
     
     /**
      *
@@ -61,9 +45,25 @@ public class Connection {
     
     /**
      *
+     * @return connection cost
+     */
+    public int getCostEuros() {
+        return this.cost;
+    }
+    
+    /**
+     *
+     * @return connection distance
+     */
+    public int getDistance() {
+        return this.distance;
+    }
+    
+    /**
+     *
      * @return connection navigability (on foot or on bike)
      */
-    public boolean getConnectionNavigability() {
+    public boolean getNavigability() {
         return this.navigability;
     }
     

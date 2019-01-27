@@ -227,7 +227,7 @@ public class CourseManager {
             IVertex<PointOfInterest> lowerCostVertex = findLowerCostVertex(unvisited, costs);
             unvisited.remove(lowerCostVertex);
             for (IEdge<Connection, PointOfInterest> edge : this.mapManager.getDiGraph().accedentEdges(lowerCostVertex)) {
-                if (navigability == false || (navigability == true && edge.element().getConnectionNavigability() == navigability)) {
+                if (navigability == false || (navigability == true && edge.element().getNavigability() == navigability)) {
                     IVertex<PointOfInterest> opposite = this.mapManager.getDiGraph().opposite(lowerCostVertex, edge);
                     if (!visited.contains(opposite)) {
                         double edgeWeight = 0.0;

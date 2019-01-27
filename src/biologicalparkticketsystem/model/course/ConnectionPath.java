@@ -15,7 +15,8 @@ public class ConnectionPath extends Connection {
     
     @Override
     public String toString() {
-        return this.getConnectionName();
+        return String.format("%s {path, %dm, €%d%s}",
+                getConnectionName(), getDistance(), getCostEuros(), (getNavigability() ? ", bicycle" : ""));
     }
     
 }
