@@ -3,7 +3,7 @@ package biologicalparkticketsystem.model.document;
 import java.io.Serializable;
 import java.util.List;
 
-public class Ticket implements Serializable {
+public class Ticket implements IDocument, Serializable {
     
     private String uid;
     private String issueDate;
@@ -27,6 +27,7 @@ public class Ticket implements Serializable {
         this.totalCost = totalCost;
     }
     
+    @Override
     public String getUid() {
         return this.uid;
     }
