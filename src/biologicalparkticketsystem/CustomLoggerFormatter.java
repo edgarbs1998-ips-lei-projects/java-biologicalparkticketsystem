@@ -8,7 +8,7 @@ import java.util.logging.LogRecord;
 
 public class CustomLoggerFormatter extends Formatter {
     
-    private static final String format = "%1$tF %1$tT | %2$-7s | %3$s%4$s%n"; // format string for printing the log record
+    private static final String FORMAT = "%1$tF %1$tT | %2$-7s | %3$s%4$s%n"; // format string for printing the log record
     private final Date dat = new Date();
 
     @Override
@@ -24,7 +24,7 @@ public class CustomLoggerFormatter extends Formatter {
             pw.close();
             throwable = sw.toString();
         }
-        return String.format(format,
+        return String.format(FORMAT,
                              dat,
                              record.getLevel().getLocalizedName(),
                              message,

@@ -1,6 +1,5 @@
 package biologicalparkticketsystem;
 
-import biologicalparkticketsystem.ConfigManager;
 import biologicalparkticketsystem.model.course.MapManager;
 import biologicalparkticketsystem.model.document.IInvoiceDAO;
 import biologicalparkticketsystem.model.statistic.IStatisticsDAO;

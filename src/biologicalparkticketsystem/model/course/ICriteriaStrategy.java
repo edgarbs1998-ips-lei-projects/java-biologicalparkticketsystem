@@ -6,6 +6,7 @@ public interface ICriteriaStrategy {
     
     String getUnit();
     
+    @Override
     String toString();
     
 }

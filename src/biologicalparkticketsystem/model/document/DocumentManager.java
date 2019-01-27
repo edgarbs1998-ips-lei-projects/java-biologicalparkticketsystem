@@ -2,7 +2,6 @@ package biologicalparkticketsystem.model.document;
 
 import biologicalparkticketsystem.model.course.CalculatedPath;
 import biologicalparkticketsystem.model.course.Connection;
-import biologicalparkticketsystem.model.course.CourseManager;
 import biologicalparkticketsystem.DaoManager;
 import biologicalparkticketsystem.LoggerManager;
 import biologicalparkticketsystem.model.course.CriteriaStrategyCost;

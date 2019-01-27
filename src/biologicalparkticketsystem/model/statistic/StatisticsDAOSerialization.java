@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package biologicalparkticketsystem.model.statistic;
 
 import biologicalparkticketsystem.model.document.Ticket;
@@ -27,10 +22,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- *
- * @author golds
- */
 public class StatisticsDAOSerialization implements IStatisticsDAO {
     
     private MapManager mapManager;
