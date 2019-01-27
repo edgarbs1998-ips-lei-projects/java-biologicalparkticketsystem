@@ -13,35 +13,6 @@ import java.util.Set;
 
 public class CourseManager {
     
-    /**
-     * All the criteria needed for the application
-     */
-    public enum Criteria {
-        DISTANCE, 
-        COST;
-
-         /**
-          *
-          * @return the type of unit that is used for cost and distance, by default is "Unknown"
-          */
-        public String getUnit() {
-            switch (this) {
-                case COST: return "€";
-                case DISTANCE: return "Meters";
-            }
-            return "Unknown";
-        }
-        
-        @Override
-        public String toString() {
-            switch (this) {
-                case COST: return "Cost";
-                case DISTANCE: return "Distance";
-            }
-            return "Unknown";
-        }
-    };
-    
     private final MapManager mapManager;
     private CalculatedPathCareTaker calculatedPathCareTaker;
     private CalculatedPath calculatedPath;
@@ -80,7 +51,7 @@ public class CourseManager {
      * @param mustVisitPois
      * @throws biologicalparkticketsystem.model.course.CourseManagerException
      */
-    public void minimumCriteriaPath(Criteria criteria,
+    public void minimumCriteriaPath(ICriteriaStrategy criteria,
             boolean navigability,
             List<PointOfInterest> mustVisitPois) throws CourseManagerException {
         
@@ -203,7 +174,7 @@ public class CourseManager {
      * @param predecessors
      * @param edges
      */
-    private void dijkstraAlgorithm(Criteria criteria,
+    private void dijkstraAlgorithm(ICriteriaStrategy criteria,
             boolean navigability,
             IVertex<PointOfInterest> orig,
             Map<IVertex<PointOfInterest>, CalculatedDijkstra> calculatedDijkstras) {
@@ -230,15 +201,7 @@ public class CourseManager {
                 if (navigability == false || (navigability == true && edge.element().getNavigability() == navigability)) {
                     IVertex<PointOfInterest> opposite = this.mapManager.getDiGraph().opposite(lowerCostVertex, edge);
                     if (!visited.contains(opposite)) {
-                        double edgeWeight = 0.0;
-                        switch (criteria) {
-                            case COST:
-                                edgeWeight = edge.element().getCostEuros();
-                                break;
-                            case DISTANCE:
-                                edgeWeight = edge.element().getDistance();
-                                break;
-                        }
+                        double edgeWeight = criteria.getEdgeWeight(edge.element());
 
                         double sourceCost = costs.get(lowerCostVertex);
                         if (sourceCost + edgeWeight < costs.get(opposite)) {

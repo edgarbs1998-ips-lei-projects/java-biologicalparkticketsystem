@@ -1,12 +1,11 @@
 package biologicalparkticketsystem.model.course;
 
-import biologicalparkticketsystem.model.course.CourseManager.Criteria;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CalculatedPath {
     
-    private Criteria criteria;
+    private ICriteriaStrategy criteria;
     private boolean navigability;
     private int cost;
     private List<PointOfInterest> pointsOfInterest;
@@ -20,11 +19,11 @@ public class CalculatedPath {
         this.mustVisit = new ArrayList<>();
     }
     
-    public Criteria getCriteria() {
+    public ICriteriaStrategy getCriteria() {
         return this.criteria;
     }
     
-    public void setCriteria(Criteria criteria) {
+    public void setCriteria(ICriteriaStrategy criteria) {
         this.criteria = criteria;
     }
     

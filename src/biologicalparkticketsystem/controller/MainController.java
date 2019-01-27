@@ -3,8 +3,8 @@ package biologicalparkticketsystem.controller;
 import biologicalparkticketsystem.LoggerManager;
 import biologicalparkticketsystem.model.MainModel;
 import biologicalparkticketsystem.model.StatisticsModel;
-import biologicalparkticketsystem.model.course.CourseManager;
 import biologicalparkticketsystem.model.course.CourseManagerException;
+import biologicalparkticketsystem.model.course.ICriteriaStrategy;
 import biologicalparkticketsystem.model.course.PointOfInterest;
 import biologicalparkticketsystem.model.document.Client;
 import biologicalparkticketsystem.view.ClientDialog;
@@ -75,7 +75,7 @@ public class MainController {
     
     public void calculatePath() {
         try {
-            CourseManager.Criteria criteria = this.view.getCriteriaComboBox();
+            ICriteriaStrategy criteria = this.view.getCriteriaComboBox();
             boolean navigability = this.view.getNavigability();
             this.model.calculatePath(criteria, navigability);
         } catch (CourseManagerException ex) {

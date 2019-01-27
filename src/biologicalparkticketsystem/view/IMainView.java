@@ -1,7 +1,7 @@
 package biologicalparkticketsystem.view;
 
 import biologicalparkticketsystem.controller.MainController;
-import biologicalparkticketsystem.model.course.CourseManager;
+import biologicalparkticketsystem.model.course.ICriteriaStrategy;
 import biologicalparkticketsystem.model.course.PointOfInterest;
 import digraph.IVertex;
 import java.util.Observer;
@@ -11,7 +11,7 @@ public interface IMainView extends Observer {
     
     Scene getScene();
     
-    CourseManager.Criteria getCriteriaComboBox();
+    ICriteriaStrategy getCriteriaComboBox();
     
     boolean getNavigability();
     

@@ -5,6 +5,8 @@ import biologicalparkticketsystem.model.course.Connection;
 import biologicalparkticketsystem.model.course.CourseManager;
 import biologicalparkticketsystem.DaoManager;
 import biologicalparkticketsystem.LoggerManager;
+import biologicalparkticketsystem.model.course.CriteriaStrategyCost;
+import biologicalparkticketsystem.model.course.CriteriaStrategyDistance;
 import biologicalparkticketsystem.model.course.PointOfInterest;
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.colors.ColorConstants;
@@ -202,12 +204,12 @@ public class DocumentManager {
             cell = new Cell().add(paragraph);
             table.addCell(cell);
             
-            paragraph = new Paragraph("Distance (" + CourseManager.Criteria.DISTANCE.getUnit() + ")");
+            paragraph = new Paragraph("Distance (" + new CriteriaStrategyDistance().getUnit() + ")");
             paragraph.setFont(fontBold).setFontSize(11);
             cell = new Cell().add(paragraph);
             table.addCell(cell);
             
-            paragraph = new Paragraph("Cost (" + CourseManager.Criteria.COST.getUnit() + ")");
+            paragraph = new Paragraph("Cost (" + new CriteriaStrategyCost().getUnit() + ")");
             paragraph.setFont(fontBold).setFontSize(11);
             cell = new Cell().add(paragraph);
             table.addCell(cell);

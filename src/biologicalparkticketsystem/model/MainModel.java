@@ -6,6 +6,7 @@ import biologicalparkticketsystem.LoggerManager;
 import biologicalparkticketsystem.model.course.Connection;
 import biologicalparkticketsystem.model.course.CourseManager;
 import biologicalparkticketsystem.model.course.CourseManagerException;
+import biologicalparkticketsystem.model.course.ICriteriaStrategy;
 import biologicalparkticketsystem.model.course.MapManager;
 import biologicalparkticketsystem.model.course.MapManagerException;
 import biologicalparkticketsystem.model.course.PointOfInterest;
@@ -84,7 +85,7 @@ public class MainModel extends Observable {
         mustVisitPois.remove(poi);
     }
     
-    public void calculatePath(CourseManager.Criteria criteria, boolean navigability) throws CourseManagerException {
+    public void calculatePath(ICriteriaStrategy criteria, boolean navigability) throws CourseManagerException {
         this.courseManager.minimumCriteriaPath(criteria, navigability, this.mustVisitPois);
         this.setChanged();
         this.notifyObservers(this.courseManager.getCalculatedPath());

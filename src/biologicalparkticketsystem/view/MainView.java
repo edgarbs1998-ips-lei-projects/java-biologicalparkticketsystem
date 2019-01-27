@@ -4,7 +4,9 @@ import biologicalparkticketsystem.controller.MainController;
 import biologicalparkticketsystem.model.MainModel;
 import biologicalparkticketsystem.model.course.CalculatedPath;
 import biologicalparkticketsystem.model.course.Connection;
-import biologicalparkticketsystem.model.course.CourseManager;
+import biologicalparkticketsystem.model.course.CriteriaStrategyCost;
+import biologicalparkticketsystem.model.course.CriteriaStrategyDistance;
+import biologicalparkticketsystem.model.course.ICriteriaStrategy;
 import biologicalparkticketsystem.model.course.PointOfInterest;
 import digraph.IEdge;
 import digraph.IVertex;
@@ -122,12 +124,12 @@ public class MainView implements IMainView {
         criteriaLabel.setStyle("-fx-font-weight: bold");
         criteriaLabel.setPadding(new Insets(0, -15, 0, 0));
         content.getChildren().add(criteriaLabel);
-        ObservableList<CourseManager.Criteria> criteriaOptions = FXCollections.observableArrayList(
-                CourseManager.Criteria.COST,
-                CourseManager.Criteria.DISTANCE
+        ObservableList<ICriteriaStrategy> criteriaOptions = FXCollections.observableArrayList(
+                new CriteriaStrategyCost(),
+                new CriteriaStrategyDistance()
         );
         this.criteriaComboBox = new ComboBox(criteriaOptions);
-        this.criteriaComboBox.setValue(CourseManager.Criteria.COST);
+        this.criteriaComboBox.setValue(new CriteriaStrategyCost());
         content.getChildren().add(this.criteriaComboBox);
         
         this.calculateButton = new Button("Calculate");
@@ -202,8 +204,8 @@ public class MainView implements IMainView {
     }
     
     @Override
-    public CourseManager.Criteria getCriteriaComboBox() {
-        return (CourseManager.Criteria) this.criteriaComboBox.getSelectionModel().getSelectedItem();
+    public ICriteriaStrategy getCriteriaComboBox() {
+        return (ICriteriaStrategy) this.criteriaComboBox.getSelectionModel().getSelectedItem();
     }
     
     @Override
@@ -214,7 +216,7 @@ public class MainView implements IMainView {
     @Override
     public void resetInput() {
         this.resetGraphColors();
-        this.criteriaComboBox.setValue(CourseManager.Criteria.COST);
+        this.criteriaComboBox.setValue(new CriteriaStrategyCost());
         this.issueTicketButton.setDisable(true);
         this.undoButton.setDisable(true);
         this.costValueLabel.textProperty().setValue("0");

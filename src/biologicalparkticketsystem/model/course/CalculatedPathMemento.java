@@ -1,19 +1,18 @@
 package biologicalparkticketsystem.model.course;
 
-import biologicalparkticketsystem.model.course.CourseManager.Criteria;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CalculatedPathMemento {
     
-    private final Criteria mementoCriteria;
+    private final ICriteriaStrategy mementoCriteria;
     private final boolean mementoNavigability;
     private final int mementoCost;
     private final List<PointOfInterest> mementoPointsOfInterest;
     private final List<Connection> mementoConnections;
     private final List<PointOfInterest> mementoMustVisit;
     
-    public CalculatedPathMemento(Criteria criteria, boolean navigability, int cost, List<PointOfInterest> pointsOfInterest, List<Connection> connections, List<PointOfInterest> mustVisit) {
+    public CalculatedPathMemento(ICriteriaStrategy criteria, boolean navigability, int cost, List<PointOfInterest> pointsOfInterest, List<Connection> connections, List<PointOfInterest> mustVisit) {
         this.mementoCriteria = criteria;
         this.mementoNavigability = navigability;
         this.mementoCost = cost;
@@ -22,7 +21,7 @@ public class CalculatedPathMemento {
         this.mementoMustVisit = new ArrayList<>(mustVisit);
     }
     
-    public Criteria getMementoCriteria() {
+    public ICriteriaStrategy getMementoCriteria() {
         return this.mementoCriteria;
     }
     
