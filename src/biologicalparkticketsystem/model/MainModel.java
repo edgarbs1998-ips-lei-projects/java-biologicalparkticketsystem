@@ -5,6 +5,7 @@ import biologicalparkticketsystem.DaoManager;
 import biologicalparkticketsystem.LoggerManager;
 import biologicalparkticketsystem.model.course.Connection;
 import biologicalparkticketsystem.model.course.CourseManager;
+import biologicalparkticketsystem.model.course.CourseManagerException;
 import biologicalparkticketsystem.model.course.MapManager;
 import biologicalparkticketsystem.model.course.MapManagerException;
 import biologicalparkticketsystem.model.course.PointOfInterest;
@@ -67,12 +68,12 @@ public class MainModel extends Observable {
         return this.mapManager.getDiGraph();
     }
     
-    public Iterable<IVertex<PointOfInterest>> getVertices() {
-        return this.mapManager.getDiGraph().vertices();
+    public IVertex<PointOfInterest> getStartVertex() {
+        return this.mapManager.getStartVertex();
     }
     
-    public PointOfInterest getStartPointOfInterest() {
-        return this.mapManager.getStartPoint();
+    public boolean hasUndoCalculatedCourse() {
+        return this.courseManager.countCalculatedCourses() > 0;
     }
     
     public void addVisitPointOfInterest(PointOfInterest poi) {
@@ -81,6 +82,26 @@ public class MainModel extends Observable {
     
     public void removeVisitPointOfInterest(PointOfInterest poi) {
         mustVisitPois.remove(poi);
+    }
+    
+    public void calculatePath(CourseManager.Criteria criteria, boolean navigability) throws CourseManagerException {
+        this.courseManager.minimumCriteriaPath(criteria, navigability, this.mustVisitPois);
+        this.setChanged();
+        this.notifyObservers(this.courseManager.getCalculatedPath());
+    }
+    
+    public void undoCalculatedCourse() {
+        this.courseManager.undoCalculatedCourse();
+        this.setChanged();
+        this.notifyObservers(this.courseManager.getCalculatedPath());
+    }
+    
+    public void generateDocuments(Client client) {
+        this.documentManager.generateDocuments(this.courseManager.getCalculatedPath(), client);
+    }
+    
+    public void clearCalculatedCourses() {
+        this.courseManager.clearCalculatedCourses();
     }
     
 }

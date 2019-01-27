@@ -78,14 +78,14 @@ public class CourseManager {
      * @param criteria
      * @param navigability
      * @param mustVisitPois
-     * @return success
+     * @throws biologicalparkticketsystem.model.course.CourseManagerException
      */
     public void minimumCriteriaPath(Criteria criteria,
             boolean navigability,
             List<PointOfInterest> mustVisitPois) throws CourseManagerException {
         
         if (mustVisitPois.isEmpty()) {
-            throw new CourseManagerException("To generate a path a minimum of one point of interest must be selected");
+            throw new CourseManagerException("To generate a path a minimum of one point of interest must be selected.");
         }
         
         CalculatedPath oldCalculatedPath = this.calculatedPath;
@@ -93,7 +93,7 @@ public class CourseManager {
         try {
             this.calculatedPath = new CalculatedPath();
 
-            IVertex<PointOfInterest> startPoi = this.mapManager.checkPointOfInterest(this.mapManager.getStartPoint());
+            IVertex<PointOfInterest> startPoi = this.mapManager.getStartVertex();
 
             Map<IVertex<PointOfInterest>, CalculatedDijkstra> calculatedDijkstras = new HashMap<>();
 
@@ -182,7 +182,7 @@ public class CourseManager {
         while (destination != origin) {
             tempPois.add(0, destination.element());
             if (!calculatedDijkstra.getEdges().containsKey(destination) || calculatedDijkstra.getEdges().get(destination) == null) {
-                throw new CourseManagerException("It is not possible to calculate a path for the selected points of interest");
+                throw new CourseManagerException("It is not possible to calculate a path for the selected point(s) of interest.");
             }
             tempConnections.add(0, calculatedDijkstra.getEdges().get(destination).element());
             destination = calculatedDijkstra.getPredecessors().get(destination);

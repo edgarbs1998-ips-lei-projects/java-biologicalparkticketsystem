@@ -1,26 +1,34 @@
 package biologicalparkticketsystem.view;
 
 import biologicalparkticketsystem.controller.MainController;
+import biologicalparkticketsystem.model.course.CourseManager;
 import biologicalparkticketsystem.model.course.PointOfInterest;
 import digraph.IVertex;
 import java.util.Observer;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 
 public interface IMainView extends Observer {
     
     Scene getScene();
     
-//    String getUserInput();
+    CourseManager.Criteria getCriteriaComboBox();
     
-//    void showError(String errMessage);
+    boolean getNavigability();
     
-//    void resetInput();
+    void resetInput();
+    
+    void showSuccess(String message);
+    
+    void showError(String message);
     
     void setTriggers(MainController controller);
     
     void plotGraph();
     
-    void setGraphVertexColor(IVertex<PointOfInterest> poi, Color fill, Color stroke);
+    void markPoiToVisit(IVertex<PointOfInterest> poi);
+    
+    void unmarkPoiToVisit(IVertex<PointOfInterest> poi);
+    
+    void showNifQuestionDialog(MainController controller);
     
 }

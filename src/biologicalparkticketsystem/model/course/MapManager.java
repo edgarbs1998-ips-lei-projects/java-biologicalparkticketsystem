@@ -33,8 +33,8 @@ public class MapManager {
         return this.digraph;
     }
     
-    public PointOfInterest getStartPoint() {
-        return this.startPoint;
+    public IVertex<PointOfInterest> getStartVertex() {
+        return this.getDiGraph().getVertexByElement(this.startPoint);
     }
     
     private void loadMapFile(String mapFilePath) throws MapManagerException {

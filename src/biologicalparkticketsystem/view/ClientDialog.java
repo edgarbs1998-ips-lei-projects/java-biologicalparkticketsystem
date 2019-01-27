@@ -13,14 +13,14 @@ import javafx.scene.layout.GridPane;
 public class ClientDialog extends Dialog<Client> {
     
     public ClientDialog () {
-        // Create the custom dialog
+        // Create the client dialog
         setTitle("Client Form");
         setHeaderText("Input your information for the invoice");
         
         // Set the button types
         getDialogPane().getButtonTypes().addAll(ButtonType.NEXT, ButtonType.CANCEL);
         
-        // Create the username and password labels and fields
+        // Create the client labels and fields
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -52,24 +52,22 @@ public class ClientDialog extends Dialog<Client> {
         grid.add(new Label("Country:"), 0, 5);
         grid.add(country, 1, 5);
         
-        // Enable/Disable confirm button depending on whether a username was entered
-        Node confirmButton = getDialogPane().lookupButton(getDialogPane().getButtonTypes().get(0));
-        confirmButton.setDisable(true);
-        
-        // Do some validation (using the Java 8 lambda syntax)
+        // Enable/Disable confirm button depending on whether a nif was entered
+        Node nextButton = getDialogPane().lookupButton(getDialogPane().getButtonTypes().get(0));
+        nextButton.setDisable(true);
         nif.textProperty().addListener((observable, oldValue, newValue) -> {
-            confirmButton.setDisable(newValue.trim().isEmpty());
+            nextButton.setDisable(newValue.trim().isEmpty());
         });
         
+        // Set dialog content
         getDialogPane().setContent(grid);
         
-        // Request focus on the username field by default
+        // Request focus on the nif field by default
         Platform.runLater(() -> nif.requestFocus());
         
-        // Convert the result to a username-password-pair when the login button is clicked
+        // Convert the result to a client object when the next button is clicked
         setResultConverter(dialogButton -> {
             if (dialogButton == ButtonType.NEXT) {
-                // TODO MVC
                 Client client = new Client(name.getText(), nif.getText());
                 Client.Address clientAddress = client.new Address(address.getText(), postalCode.getText(), location.getText(), country.getText());
                 client.setAddress(clientAddress);

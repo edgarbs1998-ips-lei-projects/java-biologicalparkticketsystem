@@ -1,11 +1,14 @@
 package biologicalparkticketsystem.controller;
 
 import biologicalparkticketsystem.model.MainModel;
+import biologicalparkticketsystem.model.course.CourseManager;
+import biologicalparkticketsystem.model.course.CourseManagerException;
 import biologicalparkticketsystem.model.course.PointOfInterest;
+import biologicalparkticketsystem.model.document.Client;
+import biologicalparkticketsystem.view.ClientDialog;
 import biologicalparkticketsystem.view.IMainView;
 import digraph.IVertex;
-import javafx.scene.control.Alert;
-import javafx.scene.paint.Color;
+import javafx.scene.control.ButtonType;
 
 public class MainController {
     
@@ -29,72 +32,50 @@ public class MainController {
 //        statisticsStage.show();
     }
     
-    public void changePointOfInterest(IVertex<PointOfInterest> poi, Boolean oldValue, Boolean newValue) {
+    public void changePointOfInterest(IVertex<PointOfInterest> poi, boolean oldValue, boolean newValue) {
         if (newValue) {
             this.model.addVisitPointOfInterest(poi.element());
-            this.view.setGraphVertexColor(poi, Color.RED, Color.BLACK);
+            this.view.markPoiToVisit(poi);
         } else {
             this.model.removeVisitPointOfInterest(poi.element());
-            this.view.setGraphVertexColor(poi, Color.ORANGE, Color.CORAL);
+            this.view.unmarkPoiToVisit(poi);
         }
     }
     
     public void issueTicket() {
-//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-//        alert.setTitle("Personal information");
-//        alert.setHeaderText("We may need more information about you, before purchasing the ticket");
-//        alert.setContentText("Do you want your invoice with NIF?");
-//        alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
-//        alert.showAndWait().ifPresent(type -> {
-//            if (type == ButtonType.YES) {
-//                Optional<Client> result = new ClientDialog().showAndWait();
-//
-//                result.ifPresent(client -> {
-//                    generateDocuments(client);
-//                });
-//            } else {
-//                generateDocuments(null);
-//            }
-//        });
+        this.view.showNifQuestionDialog(this);
+    }
+    
+    public void nifDialogResponse(ButtonType type) {
+        if (type == ButtonType.YES) {
+            new ClientDialog().showAndWait().ifPresent(client -> {
+                this.generateDocuments(client);
+            });
+        } else {
+            this.generateDocuments(null);
+        }
+    }
+    
+    private void generateDocuments(Client client) {
+        this.model.generateDocuments(client);
+        this.view.showSuccess("Your ticket has been issued!");
+        
+        this.model.clearCalculatedCourses();
+        this.view.resetInput();
     }
     
     public void calculatePath() {
-//        CourseManager.Criteria criteria = (CourseManager.Criteria) pathComboBox.getSelectionModel().getSelectedItem();
-//            
-//        boolean navigability = (!((RadioButton )group.getSelectedToggle()).getText().equals("Foot"));
-//
-//        try {
-//            courseManager.minimumCriteriaPath(criteria, navigability, this.selectedPois);
-//        } catch (CourseManagerException ex) {
-//            Alert alert = new Alert(Alert.AlertType.WARNING);
-//            alert.setTitle ("An error has occured while calculating the course");
-//            alert.setHeaderText(null);
-//            alert.setContentText(ex.getMessage());
-//            alert.show();
-//
-//            return;
-//        }
-//
-//        resetColors();
-//        updateColors();
-//
-//        payBtn.setDisable(false);
-//        if (courseManager.countCalculatedCourses() > 0) {
-//            undoBtn.setDisable(false);
-//        }
-//
-//        updateCosts();
+        try {
+            CourseManager.Criteria criteria = this.view.getCriteriaComboBox();
+            boolean navigability = this.view.getNavigability();
+            this.model.calculatePath(criteria, navigability);
+        } catch (CourseManagerException ex) {
+            this.view.showError(ex.getMessage());
+        }
     }
     
     public void undoCalculate() {
-//        courseManager.undoCalculatedCourse();
-//        resetColors();
-//        updateColors();
-//        updateCosts();
-//
-//        if (courseManager.countCalculatedCourses() == 0) {
-//            undoBtn.setDisable(true);
-//        }
+        this.model.undoCalculatedCourse();
     }
     
 }
