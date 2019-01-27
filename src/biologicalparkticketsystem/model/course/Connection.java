@@ -2,7 +2,7 @@ package biologicalparkticketsystem.model.course;
 
 import java.util.Objects;
 
-public class Connection {
+public abstract class Connection {
     
     // Attributes
     private final int id;
@@ -93,5 +93,18 @@ public class Connection {
         result = prime * result + this.id;
         return result;
     }
+    
+    @Override
+    public String toString() {
+        return String.format("%s {%s, %s, %dm, €%d}",
+                this.getConnectionName(),
+                this.getTypeName(),
+                (this.getNavigability() ? "bicycle" : "foot"),
+                this.getDistance(),
+                this.getCostEuros()
+        );
+    }
+    
+    public abstract String getTypeName();
     
 }
