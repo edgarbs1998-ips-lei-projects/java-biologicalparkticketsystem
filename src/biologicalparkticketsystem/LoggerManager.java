@@ -9,8 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Class responsable to manage the outputed logs
- * @author Luis Varela
+ * Class responsable to manage the logger
  */
 public class LoggerManager {
     
@@ -24,7 +23,7 @@ public class LoggerManager {
         STATISTICS_CHECKS;
         
         /**
-         * string method that verifys what component is to be outputed and returns the component name
+         * Method that returns the component name
          * @return name of the component
          */
         public String getName() {
@@ -38,7 +37,7 @@ public class LoggerManager {
         }
         
         /**
-         * this method is reponsible to return the message that is to be outputed in the log file
+         * Method is reponsible to return the message that is to be outputed in the log file
          * @return the message to be outputed to log file
          */
         public String getMessage() {
@@ -58,7 +57,7 @@ public class LoggerManager {
     private LoggerManager() { }
     
     /**
-     * void method to initialize all the components of the logger features
+     * Method to initialize all the components of the logger features
      */
     public void init() {
         try {
@@ -92,7 +91,7 @@ public class LoggerManager {
     }
     
     /**
-     * a method to get the singleton instance of class LoggerManager
+     * Method to get the singleton instance of class LoggerManager
      * @return instance of singleton class LoggerManager
      */
     public static LoggerManager getInstance() {
@@ -100,7 +99,7 @@ public class LoggerManager {
     }
     
     /**
-     * method to start the logging feature 
+     * Method to log a message
      * @param message message to add to the outputed log file
      * @param level level of error or notification of the log
      * @param component component type of the log to be outputed
@@ -134,34 +133,72 @@ public class LoggerManager {
         this.logger.log(level, message, thrown);
     }
     
+    /**
+     * Method to log a message
+     * @param component component type of the log to be outputed
+     */
     public void log(Component component) {
          this.log(null, Level.INFO, component, null);
     }
     
+    /**
+     * Method to log a message
+     * @param message message to add to the outputed log file
+     * @param level level of error or notification of the log
+     * @param component component type of the log to be outputed
+     */
     public void log(Component component, String message, Level level) {
          this.log(message, level, component, null);
     }
     
+    /**
+     * Method to log a message
+     * @param message message to add to the outputed log file
+     * @param component component type of the log to be outputed
+     */
     public void log(Component component, String message) {
         this.log(message, Level.INFO, component, null);
     }
     
+    /**
+     * Method to log a message
+     * @param message message to add to the outputed log file
+     * @param level level of error or notification of the log
+     */
     public void log(String message, Level level) {
         this.log(message, level, Component.GLOBAL, null);
     }
     
+    /**
+     * Method to log a message
+     * @param message message to add to the outputed log file
+     */
     public void log(String message) {
         this.log(message, Level.INFO, Component.GLOBAL, null);
     }
     
+    /**
+     * Method to log a message
+     * @param thrown parameter that contains the thrown error
+     */
     public void log(Throwable thrown) {
         this.log(null, Level.SEVERE, Component.GLOBAL, thrown);
     }
     
+    /**
+     * Method to log a message
+     * @param level level of error or notification of the log
+     * @param thrown parameter that contains the thrown error
+     */
     public void log(Throwable thrown, Level level) {
         this.log(null, level, Component.GLOBAL, thrown);
     }
     
+    /**
+     * Method to log a message
+     * @param message message to add to the outputed log file
+     * @param thrown parameter that contains the thrown error
+     */
     public void log(String message, Throwable thrown) {
         this.log(message, Level.SEVERE, Component.GLOBAL, thrown);
     }

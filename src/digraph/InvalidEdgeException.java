@@ -1,5 +1,8 @@
 package digraph;
 
+/**
+ * Class to handle invalid edge exceptions
+ */
 public class InvalidEdgeException extends RuntimeException {
 
     /**

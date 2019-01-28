@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
+/**
+ * Class to handle ticket persistence based on sqlite
+ */
 public class TicketDAOSqlLite implements ITicketDAO {
     
     private Connection connection;

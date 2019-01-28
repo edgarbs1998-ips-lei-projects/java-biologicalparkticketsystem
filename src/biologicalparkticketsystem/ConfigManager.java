@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 
 /**
  * Config class to get the configurations of the config file
- * @author Luis Varela
  */
 public class ConfigManager {
     
@@ -22,7 +21,7 @@ public class ConfigManager {
     private ConfigManager() { }
     
     /**
-     *  method to initialize all the properties in the config file
+     * Method to initialize all the properties in the config file
      */
     public void init() {
         this.properties = new Properties();
@@ -46,7 +45,7 @@ public class ConfigManager {
     }
     
     /**
-     * method to get the instance of the singleton class ConfigManager
+     * Method to get the instance of the singleton class ConfigManager
      * @return instance of class ConfigManager
      */
     public static ConfigManager getInstance() {
@@ -54,8 +53,8 @@ public class ConfigManager {
     } 
     
     /**
-     * method to get the properties of the class
-     * @return properties of the singleton class ConfigManager
+     * Method to get the config properties
+     * @return config properties
      */
     public Properties getProperties() {
         return this.properties;

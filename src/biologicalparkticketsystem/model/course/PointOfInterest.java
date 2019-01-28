@@ -2,40 +2,27 @@ package biologicalparkticketsystem.model.course;
 
 import java.util.Objects;
 
+/**
+ * Class to save point of interest data
+ */
 public class PointOfInterest {
     
     private final int id;
     private final String pointName;
-
-    /**
-     * @param id
-     * @param pointName
-     */
+    
     public PointOfInterest(int id, String pointName) {
         this.id = id;
         this.pointName = pointName;
     }
-
-    /**
-     *
-     * @return Point of Interest ID
-     */
+    
     public int getPoiId() {
         return id;
     }
-
-    /**
-     *
-     * @return Point of Interest Name
-     */
+    
     public String getPoiName() {
         return pointName;
     }
-
-    /**
-     * Returns a string representation of the point of interest.
-     * @return A string representing the point of interest.
-     */
+    
     @Override
     public String toString() {
         return this.getPoiName();

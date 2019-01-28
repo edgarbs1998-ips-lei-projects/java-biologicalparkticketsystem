@@ -2,6 +2,9 @@ package biologicalparkticketsystem.model.document;
 
 import java.io.Serializable;
 
+/**
+* Class to save client data
+*/
 public class Client implements Serializable {
     
     private String name;
@@ -51,6 +54,9 @@ public class Client implements Serializable {
             + this.address + "\n}";
     }
     
+    /**
+     * Class to save client address data
+     */
     public class Address implements Serializable {
 
         private String address;

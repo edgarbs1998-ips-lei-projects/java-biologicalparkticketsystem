@@ -3,6 +3,9 @@ package biologicalparkticketsystem.model.document;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Class to save ticket data
+ */
 public class Ticket implements IDocument, Serializable {
     
     private String uid;
@@ -104,6 +107,9 @@ public class Ticket implements IDocument, Serializable {
             + this.items + "\n}";
     }
     
+    /**
+     * Class to save ticket item data
+     */
     public class Item implements Serializable {
         
         private String pathName;

@@ -13,20 +13,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Class responsible to manage the map load and digraph generation
+ */
 public class MapManager {
     
     private DiGraph<PointOfInterest, Connection> digraph;
     private PointOfInterest startPoint;
-
-    /**
-     * Course manager constructor
-     * @param mapFilePath
-     */
-    public MapManager(String mapFilePath) throws MapManagerException {
+    
+    public MapManager() throws MapManagerException {
         this.digraph = new DiGraph<>();
         this.startPoint = null;
-        
-        this.loadMapFile(mapFilePath);
     }
     
     public DiGraph<PointOfInterest, Connection> getDiGraph() {
@@ -37,7 +34,12 @@ public class MapManager {
         return this.getDiGraph().getVertexByElement(this.startPoint);
     }
     
-    private void loadMapFile(String mapFilePath) throws MapManagerException {
+    /**
+     * Method to load a map file from path
+     * @param mapFilePath map file path
+     * @throws MapManagerException
+     */
+    public void loadMapFile(String mapFilePath) throws MapManagerException {
         try {
             File mapFile = new File(mapFilePath);
             Scanner scanner = new Scanner(mapFile);
@@ -124,6 +126,12 @@ public class MapManager {
         }
     }
     
+    /**
+     * Method to get a point of interest by its id
+     * @param id poi id
+     * @return point of interest instance
+     * @throws MapManagerException
+     */
     public PointOfInterest getPointOfInterestById(int id) throws MapManagerException {
         IVertex<PointOfInterest> find = null;
         
@@ -141,6 +149,12 @@ public class MapManager {
         return find.element();
     }
     
+    /**
+     * Method to get the vertex of a point of interest
+     * @param poi point of interest to get
+     * @return vertex of the passed poi
+     * @throws MapManagerException
+     */
     public IVertex<PointOfInterest> checkPointOfInterest(PointOfInterest poi) throws MapManagerException {
         if( poi == null) {
             throw new MapManagerException("Point of interest cannot be null");
@@ -160,11 +174,6 @@ public class MapManager {
         return find;
     }
     
-    /**
-     * Adds a point of interest
-     * @param poi
-     * @throws MapManagerException
-     */
     private void addPointOfInterest(PointOfInterest poi) throws MapManagerException {
         if( poi == null ) {
             throw new MapManagerException("Point of interest cannot be null");
@@ -177,13 +186,6 @@ public class MapManager {
         }
     }
     
-    /**
-     * Method to add a connection
-     * @param poi1
-     * @param poi2
-     * @param connection
-     * @throws MapManagerException
-     */
     private void addConnection(PointOfInterest poi1, PointOfInterest poi2, Connection connection) throws MapManagerException {
         if( connection == null) {
             throw new MapManagerException("Connection is null");
@@ -202,13 +204,6 @@ public class MapManager {
         }
     }
     
-    /**
-     * Get a connection between 
-     * @param poi1
-     * @param poi2
-     * @return
-     * @throws MapManagerException
-     */
     private List<Connection> getConnectionsBetween(PointOfInterest poi1, PointOfInterest poi2) throws MapManagerException {
         List<Connection> connectionList = new ArrayList<>();
         

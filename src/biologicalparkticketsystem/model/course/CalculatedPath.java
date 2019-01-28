@@ -3,6 +3,9 @@ package biologicalparkticketsystem.model.course;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to save data of calculated path
+ */
 public class CalculatedPath {
     
     private ICriteriaStrategy criteria;
@@ -59,6 +62,10 @@ public class CalculatedPath {
         this.mustVisit = mustVisit;
     }
     
+    /**
+     * Method to create a snapshot of the class data
+     * @return calculated path memento instance
+     */
     public CalculatedPathMemento createMomento() {
         return new CalculatedPathMemento(
                 this.criteria,
@@ -70,6 +77,10 @@ public class CalculatedPath {
         );
     }
     
+    /**
+     * Class to restore a snapshot of the class data
+     * @param memento calculated path memento instance
+     */
     public void setMemento(CalculatedPathMemento memento) {
         this.criteria = memento.getMementoCriteria();
         this.navigability = memento.getMementoNavigability();

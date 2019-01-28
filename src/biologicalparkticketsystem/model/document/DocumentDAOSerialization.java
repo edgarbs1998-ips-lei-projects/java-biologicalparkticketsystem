@@ -11,7 +11,11 @@ import java.io.ObjectOutputStream;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class DocumentDAOSerialization<D extends IDocument> {
+/**
+ * Abstract class used documents which use dao serialization
+ * @param <D> docucment class type
+ */
+public abstract class DocumentDAOSerialization<D extends IDocument> {
     
     private final String filePath;
     private HashSet<D> list;
@@ -51,6 +55,11 @@ public class DocumentDAOSerialization<D extends IDocument> {
         }
     }
     
+    /**
+     * Method to insert a document to be persisted
+     * @param document document instance
+     * @return
+     */
     public boolean insert(D document) {
         if (this.list.contains(document)) {
             return false;
@@ -60,6 +69,11 @@ public class DocumentDAOSerialization<D extends IDocument> {
         return true;
     }
     
+    /**
+     * Method find a document by its unique id
+     * @param uid document uid
+     * @return document instance
+     */
     public D find(String uid) {
         for (D document : this.list) {
             if (document.getUid().equals(uid)) {
@@ -69,6 +83,10 @@ public class DocumentDAOSerialization<D extends IDocument> {
         return null;
     }
     
+    /**
+     * Method to return all documents
+     * @return a collection of documents
+     */
     public Collection<D> selectAll() {
         return this.list;
     }

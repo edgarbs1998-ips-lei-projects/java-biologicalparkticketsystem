@@ -2,6 +2,9 @@ package biologicalparkticketsystem.model.document;
 
 import java.util.Collection;
 
+/**
+ * Class to handle ticket persistence based on serialization
+ */
 public class TicketDAOSerialization extends DocumentDAOSerialization<Ticket> implements ITicketDAO {
 
     private final static String FILENAME = "tickets.dat";

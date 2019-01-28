@@ -245,10 +245,21 @@ public class DiGraph<V, E> implements IDiGraph<V, E> {
         return oldElement;
     }
     
+    /**
+     * Retrieve a vertex by its element
+     * @param element
+     * @return vertex
+     */
     public IVertex<V> getVertexByElement(V element) {
         return vertices.get(element);
     }
     
+    /**
+     * Retrieve a edge by its edge and vertex
+     * @param edge
+     * @param vertex
+     * @return edge
+     */
     public IEdge<E, V> getEdgeByElement(E edge, V vertex) {
         IVertex<V> tempVertex = getVertexByElement(vertex);
         List<IEdge<E, V>> tempEdge = edges.get(edge);

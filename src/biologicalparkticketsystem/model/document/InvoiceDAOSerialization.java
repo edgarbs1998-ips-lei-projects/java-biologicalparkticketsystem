@@ -2,6 +2,9 @@ package biologicalparkticketsystem.model.document;
 
 import java.util.Collection;
 
+/**
+ * Class to handle invoice persistence based on serialization
+ */
 public class InvoiceDAOSerialization extends DocumentDAOSerialization<Invoice> implements IInvoiceDAO {
 
     private final static String FILENAME = "invoices.dat";

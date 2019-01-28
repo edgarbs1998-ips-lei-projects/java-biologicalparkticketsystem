@@ -3,6 +3,9 @@ package biologicalparkticketsystem.model.statistic;
 import java.io.Serializable;
 import java.util.Map;
 
+/**
+ * Class to save statistics data
+ */
 public class Statistics implements Serializable {
     
     private String mapName;

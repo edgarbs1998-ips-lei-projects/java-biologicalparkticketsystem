@@ -29,6 +29,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+/**
+ * Class to generate a document ticket
+ */
 public class DocumentTicket extends ADocument {
     
     private Ticket ticket;
@@ -61,6 +64,10 @@ public class DocumentTicket extends ADocument {
         }
     }
     
+    /**
+     * Generate ticket document pdf
+     * @throws FileNotFoundException
+     */
     public void generateTicket() throws FileNotFoundException {
         String pdfPath = this.documentPath + (client == null ? "customer" : client.getNif()) + "_" + fileDateFormat.format(now) + "_bilhete.pdf";
         PdfDocument pdfDocument = new PdfDocument(new PdfWriter(pdfPath));

@@ -22,6 +22,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Class to handle statistics persistence based on serialization
+ */
 public class StatisticsDAOSerialization implements IStatisticsDAO {
     
     private MapManager mapManager;

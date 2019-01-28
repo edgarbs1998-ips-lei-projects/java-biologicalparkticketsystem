@@ -2,6 +2,9 @@ package biologicalparkticketsystem.model.course;
 
 import java.util.Objects;
 
+/**
+ * Abstract class of connection used by connections types classes
+ */
 public abstract class Connection {
     
     // Attributes
@@ -11,13 +14,6 @@ public abstract class Connection {
     private final int distance;
     private final boolean navigability;
     
-    /**
-     * @param id
-     * @param connectionName
-     * @param cost
-     * @param distance
-     * @param navigability
-     */
     public Connection(int id, String connectionName, int cost, int distance, boolean navigability) {
         this.id = id;
         this.connectionName = connectionName;
@@ -27,42 +23,22 @@ public abstract class Connection {
         
     }
     
-    /**
-     *
-     * @return connection name
-     */
     public String getConnectionName() {
         return this.connectionName;
     }
     
-    /**
-     *
-     * @return connection id
-     */
     public int getConnectionId() {
         return this.id;
     }
     
-    /**
-     *
-     * @return connection cost
-     */
     public int getCostEuros() {
         return this.cost;
     }
     
-    /**
-     *
-     * @return connection distance
-     */
     public int getDistance() {
         return this.distance;
     }
     
-    /**
-     *
-     * @return connection navigability (on foot or on bike)
-     */
     public boolean getNavigability() {
         return this.navigability;
     }
@@ -105,6 +81,10 @@ public abstract class Connection {
         );
     }
     
+    /**
+     * Method to return the connection type
+     * @return type name
+     */
     public abstract String getTypeName();
     
 }

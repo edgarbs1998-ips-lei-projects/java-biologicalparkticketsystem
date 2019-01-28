@@ -11,16 +11,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Class responsible to manage course calculations
+ */
 public class CourseManager {
     
     private final MapManager mapManager;
     private CalculatedPathCareTaker calculatedPathCareTaker;
     private CalculatedPath calculatedPath;
-
-    /**
-     * Course manager constructor
-     * @param mapManager
-     */
+    
     public CourseManager(MapManager mapManager) {
         this.mapManager = mapManager;
         this.calculatedPathCareTaker = new CalculatedPathCareTaker();
@@ -31,24 +30,34 @@ public class CourseManager {
         return this.calculatedPath;
     }
     
+    /**
+     * Method to undo last calculated course
+     */
     public void undoCalculatedCourse() {
         this.calculatedPathCareTaker.restoreState(this.calculatedPath);
     }
     
+    /**
+     * Method to clear calculated courses historic
+     */
     public void clearCalculatedCourses() {
         this.calculatedPathCareTaker.clearStates();
         this.calculatedPath = null;
     }
     
+    /**
+     * Method to return the amount of calculated courses in the historic
+     * @return amount of calculated courses
+     */
     public int countCalculatedCourses() {
         return this.calculatedPathCareTaker.countStates();
     }
     
     /**
-     * Calculates the minimum cost path
-     * @param criteria
-     * @param navigability
-     * @param mustVisitPois
+     * Calculates the minimum cost path based on a criteria for the selected pois
+     * @param criteria criteria strategy used for calculation
+     * @param navigability true if user is on bike
+     * @param mustVisitPois list of pois which musr be visited
      * @throws biologicalparkticketsystem.model.course.CourseManagerException
      */
     public void minimumCriteriaPath(ICriteriaStrategy criteria,
@@ -166,14 +175,6 @@ public class CourseManager {
         
     }
     
-    /**
-     * dijkstra logic
-     * @param criteria
-     * @param orig
-     * @param costs
-     * @param predecessors
-     * @param edges
-     */
     private void dijkstraAlgorithm(ICriteriaStrategy criteria,
             boolean navigability,
             IVertex<PointOfInterest> orig,

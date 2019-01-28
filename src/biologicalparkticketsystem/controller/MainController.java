@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 
 /**
  * Class responsable to control the main view and model
- * @author Luis Varela
  */
 public class MainController {
     
@@ -26,7 +25,9 @@ public class MainController {
     private IMainView view;
     
     /**
-     * constructor of the class MainController, where the view and model are initialized
+     * Constructor of the class MainController, where the view and model are initialized
+     * @param model main model
+     * @param view main view
      */
     public MainController(MainModel model, IMainView view) {
         this.model = model;
@@ -35,7 +36,7 @@ public class MainController {
         this.model.addObserver(view);
     }
     /**
-     * method to open the statistics window
+     * Method to open the statistics window
      */
     public void openStatistics() {
         LoggerManager.getInstance().log(LoggerManager.Component.STATISTICS_CHECKS);
@@ -51,7 +52,10 @@ public class MainController {
     }
     
     /**
-     * method to change the point of interest if a point of interest is selected
+     * Handler to change the selected points of interest
+     * @param poi selected point of interest
+     * @param oldValue old field value
+     * @param newValue new field value
      */
     public void changePointOfInterest(IVertex<PointOfInterest> poi, boolean oldValue, boolean newValue) {
         if (newValue) {
@@ -71,7 +75,8 @@ public class MainController {
     }
     
     /**
-     * method to open the nif form
+     * Method to open the nif form
+     * @param type button type
      */
     public void nifDialogResponse(ButtonType type) {
         if (type == ButtonType.YES) {
@@ -82,8 +87,10 @@ public class MainController {
             this.generateDocuments(null);
         }
     }
+    
     /**
-     * method to generate the documents of the ticket and the invoice
+     * Method to generate the documents of the ticket and the invoice
+     * @param client
      */
     private void generateDocuments(Client client) {
         this.model.generateDocuments(client);
@@ -92,8 +99,9 @@ public class MainController {
         this.model.clearCalculatedCourses();
         this.view.resetInput();
     }
+    
     /**
-     * handler to calculate the selected path
+     * Handler to calculate the selected path
      */
     public void calculatePath() {
         try {
@@ -104,8 +112,9 @@ public class MainController {
             this.view.showError(ex.getMessage());
         }
     }
+    
     /**
-     * handler to undo the selected path
+     * Handler to undo the selected path
      */
     public void undoCalculate() {
         this.model.undoCalculatedCourse();

@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+/**
+ * Class responsible to handle documents generation
+ */
 public class DocumentManager {
     
     private final String documentPath;
@@ -24,6 +27,11 @@ public class DocumentManager {
         }
     }
     
+    /**
+     * Method to generate ticket and invoice documents
+     * @param calculatedPath calculated path to be used on document calculation
+     * @param client client instance
+     */
     public void generateDocuments(CalculatedPath calculatedPath, Client client) {
         String uniqueId = UUID.randomUUID().toString();
         

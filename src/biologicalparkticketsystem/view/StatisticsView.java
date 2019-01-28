@@ -19,6 +19,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
 /**
  * Statistics view class where the components of the statistics view get initialized
  */
@@ -112,10 +113,8 @@ public class StatisticsView implements IStatisticsView {
         
         tab.setContent(content);
         return tab;
-    } 
-    /**
-     * Method to get the scene
-     */
+    }
+    
     @Override
     public Scene getScene() {
         return this.scene;

@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
+/**
+ * Class to handle invoice persistence based on sqlite
+ */
 public class InvoiceDAOSqlLite implements IInvoiceDAO {
     
     private Connection connection;

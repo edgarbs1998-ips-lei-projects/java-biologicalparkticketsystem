@@ -1,5 +1,8 @@
 package biologicalparkticketsystem.model.course;
 
+/**
+ * Class to handle course manager exceptions
+ */
 public class CourseManagerException extends Exception {
 
     /**
@@ -13,10 +16,10 @@ public class CourseManagerException extends Exception {
     /**
      * Constructs an instance of <code>NewException</code> with the specified
      * detail message.
-     *
      * @param msg the detail message.
      */
     public CourseManagerException(String msg) {
         super(msg);
     }
+    
 }

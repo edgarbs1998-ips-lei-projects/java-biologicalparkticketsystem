@@ -1,5 +1,8 @@
 package digraph;
 
+/**
+ * Class to handle invalid vertex exceptions
+ */
 public class InvalidVertexException extends RuntimeException {
 
     /**

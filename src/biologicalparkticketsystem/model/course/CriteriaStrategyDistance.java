@@ -1,5 +1,8 @@
 package biologicalparkticketsystem.model.course;
 
+/**
+ * Class used for path calculation distance criteria strategy
+ */
 public class CriteriaStrategyDistance implements ICriteriaStrategy {
     
     @Override

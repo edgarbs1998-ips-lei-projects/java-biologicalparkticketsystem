@@ -22,6 +22,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Class to handle statistics persistence based on sqlite
+ */
 public class StatisticsDAOSqlLite implements IStatisticsDAO {
     
     private MapManager mapManager;

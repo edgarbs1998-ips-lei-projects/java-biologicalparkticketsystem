@@ -1,5 +1,8 @@
 package biologicalparkticketsystem.model.course;
 
+/**
+ * Class to handle map manager exceptions
+ */
 public class MapManagerException extends Exception {
 
     /**
@@ -13,7 +16,6 @@ public class MapManagerException extends Exception {
     /**
      * Constructs an instance of <code>NewException</code> with the specified
      * detail message.
-     *
      * @param msg the detail message.
      */
     public MapManagerException(String msg) {

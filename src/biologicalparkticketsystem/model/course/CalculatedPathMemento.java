@@ -3,6 +3,9 @@ package biologicalparkticketsystem.model.course;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to save snapshot data of calculated path class
+ */
 public class CalculatedPathMemento {
     
     private final ICriteriaStrategy mementoCriteria;

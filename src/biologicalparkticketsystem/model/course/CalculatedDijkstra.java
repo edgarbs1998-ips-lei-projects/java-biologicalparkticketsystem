@@ -4,6 +4,9 @@ import digraph.IEdge;
 import digraph.IVertex;
 import java.util.Map;
 
+/**
+ * Class to save data of calculated dijkstras
+ */
 public class CalculatedDijkstra {
     
     private Map<IVertex<PointOfInterest>, Double> costs;

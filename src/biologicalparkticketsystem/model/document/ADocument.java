@@ -9,6 +9,9 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
+/**
+ * Abstract class to save document data
+ */
 public abstract class ADocument {
     
     public final SimpleDateFormat fileDateFormat;
@@ -27,6 +30,10 @@ public abstract class ADocument {
         }
     }
     
+    /**
+     * Method to open a pdf file in the desktop pdf reader
+     * @param path pdf file path
+     */
     public void openPdfFile(String path) {
         try {
             File pdfFile = new File(path);

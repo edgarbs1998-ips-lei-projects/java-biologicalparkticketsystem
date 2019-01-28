@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class to generate a document invoice
+ */
 public class DocumentInvoice extends ADocument {
     
     private final static int INVOICE_DETAILS_CELL_HEIGHT = 14;
@@ -53,6 +56,10 @@ public class DocumentInvoice extends ADocument {
         this.vat = vat;
     }
     
+    /**
+     * Generate invoice document pdf
+     * @throws FileNotFoundException
+     */
     public void generateInvoice() throws FileNotFoundException {
         String pdfPath = this.documentPath + (client == null ? "customer" : client.getNif()) + "_" + fileDateFormat.format(now) + "_fatura.pdf";
         PdfDocument pdfDocument = new PdfDocument(new PdfWriter(pdfPath));

@@ -8,7 +8,6 @@ import java.util.logging.LogRecord;
 
 /**
  * Class to format the output string of the logger system
- * @author Luis Varela
  */
 public class CustomLoggerFormatter extends Formatter {
     
@@ -16,7 +15,8 @@ public class CustomLoggerFormatter extends Formatter {
     private final Date dat = new Date();
     
     /**
-     * method to format the output string to log file
+     * Method to format the output string to log file
+     * @param record log record
      * @return a string with the formated output string
      */
     @Override

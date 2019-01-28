@@ -1,5 +1,8 @@
 package biologicalparkticketsystem.model.course;
 
+/**
+ * Class used for path calculation cost criteria strategy
+ */
 public class CriteriaStrategyCost implements ICriteriaStrategy {
     
     @Override
