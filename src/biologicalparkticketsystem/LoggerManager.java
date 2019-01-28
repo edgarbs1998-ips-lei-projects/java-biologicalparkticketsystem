@@ -8,14 +8,25 @@ import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Class responsable to manage the outputed logs
+ * @author Luis Varela
+ */
 public class LoggerManager {
     
+    /**
+     * Enum to know the component that is logged
+     */
     public enum Component {
         GLOBAL, 
         TICKETS_ISSUANCE,
         COURSE_CALCULATIONS,
         STATISTICS_CHECKS;
         
+        /**
+         * string method that verifys what component is to be outputed and returns the component name
+         * @return name of the component
+         */
         public String getName() {
             switch (this) {
                 case GLOBAL: return "GLOBAL";
@@ -26,6 +37,10 @@ public class LoggerManager {
             return "Unknown";
         }
         
+        /**
+         * this method is reponsible to return the message that is to be outputed in the log file
+         * @return the message to be outputed to log file
+         */
         public String getMessage() {
             switch (this) {
                 case TICKETS_ISSUANCE: return "a ticket has been issued";
@@ -42,6 +57,9 @@ public class LoggerManager {
     
     private LoggerManager() { }
     
+    /**
+     * void method to initialize all the components of the logger features
+     */
     public void init() {
         try {
             ConfigManager config = ConfigManager.getInstance();
@@ -73,10 +91,21 @@ public class LoggerManager {
         }
     }
     
+    /**
+     * a method to get the singleton instance of class LoggerManager
+     * @return instance of singleton class LoggerManager
+     */
     public static LoggerManager getInstance() {
         return instance;
     }
     
+    /**
+     * method to start the logging feature 
+     * @param message message to add to the outputed log file
+     * @param level level of error or notification of the log
+     * @param component component type of the log to be outputed
+     * @param thrown parameter that contains the thrown error
+     */
     public void log(String message, Level level, Component component, Throwable thrown) {
         ConfigManager config = ConfigManager.getInstance();
         

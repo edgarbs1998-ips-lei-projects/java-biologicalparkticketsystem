@@ -11,6 +11,10 @@ import biologicalparkticketsystem.model.statistic.StatisticsDAOSqlLite;
 import biologicalparkticketsystem.model.document.TicketDAOSerialization;
 import biologicalparkticketsystem.model.document.TicketDAOSqlLite;
 
+/**
+ * Class to manage the presistance of data in tickets, invoices and statistics
+ * @author Luis varela
+ */
 public class DaoManager {
     
     private static DaoManager instance = new DaoManager();
@@ -21,10 +25,19 @@ public class DaoManager {
     
     private DaoManager() { }
     
+    /**
+     * method to get the instance of singleton class DaoManager
+     * @return instance of singleton class DaoManager
+     */
     public static DaoManager getInstance() {
         return instance;
     }
     
+    /**
+     * method to initialize the data trought serialization or sqllite
+     * @param config
+     * @param mapManager
+     */
     public void init(ConfigManager config, MapManager mapManager) {
         switch (config.getProperties().getProperty("persistence.type")) {
             case "serialization":
@@ -42,6 +55,10 @@ public class DaoManager {
         }
     }
     
+    /**
+     * 
+     * @return data access object of ticket
+     */
     public ITicketDAO getTicketDao() {
         return this.ticketDao;
     }

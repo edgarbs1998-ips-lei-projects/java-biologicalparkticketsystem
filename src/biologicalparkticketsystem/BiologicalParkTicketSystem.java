@@ -8,6 +8,10 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Main class where the components are initialized
+ * @author Luis Varela
+ */
 public class BiologicalParkTicketSystem extends Application {
     
     @Override
@@ -26,6 +30,7 @@ public class BiologicalParkTicketSystem extends Application {
     }
 
     /**
+     * method to launch all the components
      * @param args the command line arguments
      */
     public static void main(String[] args) {
