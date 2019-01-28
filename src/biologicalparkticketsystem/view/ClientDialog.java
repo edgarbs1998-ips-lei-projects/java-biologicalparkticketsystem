@@ -9,7 +9,9 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-
+/**
+ * Client dialog form class, this view is where the user adds some information about him
+ */
 public class ClientDialog extends Dialog<Client> {
     
     public ClientDialog () {

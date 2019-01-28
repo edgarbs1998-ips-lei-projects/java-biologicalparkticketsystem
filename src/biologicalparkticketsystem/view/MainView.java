@@ -36,7 +36,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-
+/**
+ * Main view class where the components of the main view get initialized
+ */
 public class MainView implements IMainView {
     
     // Components
@@ -71,13 +73,17 @@ public class MainView implements IMainView {
         
         this.scene = new Scene(borderPane, 800, 600);
     }
-    
+    /**
+     * Method to initialize the graph panel
+    */
     private Pane initGraphPanel() {
         VertexPlacementStrategy strategy = new CircularSortedPlacementStrategy();
         this.graphPanel = new GraphPanel<>(this.mainModel.getGraph(), strategy);
         return this.graphPanel;
     }
-    
+    /**
+     * Method to initialize the right menu itens
+     */
     private Pane initRightMenuComponents() {
         VBox content = new VBox();
         content.setSpacing(20);
@@ -112,7 +118,9 @@ public class MainView implements IMainView {
         
         return content;
     }
-    
+    /**
+     * Method to initialize the bottom menu itens
+     */
     private Pane initBottomMenuComponents() {
         HBox content = new HBox();
         content.setAlignment(Pos.CENTER_LEFT);
@@ -159,7 +167,9 @@ public class MainView implements IMainView {
         
         return content;
     }
-    
+    /**
+     * Method to update the values of some text fields
+     */
     @Override
     public void update(Observable observable, Object object) {
         CalculatedPath calculatedPath = (CalculatedPath) object;
@@ -197,22 +207,30 @@ public class MainView implements IMainView {
         this.issueTicketButton.setDisable(false);
         this.undoButton.setDisable(!this.mainModel.hasUndoCalculatedCourse());
     }
-    
+    /**
+     * Method to get the scene of the main view
+     */
     @Override
     public Scene getScene() {
         return this.scene;
     }
-    
+    /**
+     * Method to get the combobox component
+     */
     @Override
     public ICriteriaStrategy getCriteriaComboBox() {
         return (ICriteriaStrategy) this.criteriaComboBox.getSelectionModel().getSelectedItem();
     }
-    
+    /**
+     * Method to get whether the user selected to calculate the path on foot or bike
+     */
     @Override
     public boolean getNavigability() {
         return (RadioButton) this.typeToggleGroup.getSelectedToggle() == bicycleRadioButton;
     }
-    
+    /**
+     * Method to reset the inputs
+     */
     @Override
     public void resetInput() {
         this.resetGraphColors();
@@ -228,6 +246,9 @@ public class MainView implements IMainView {
         }
     }
     
+    /**
+     * Method to show a dialog with a the success message
+     */
     @Override
     public void showSuccess(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -237,6 +258,9 @@ public class MainView implements IMainView {
         alert.show();
     }
     
+    /**
+     * Method to show a window with a error message
+     */
     @Override
     public void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -246,6 +270,9 @@ public class MainView implements IMainView {
         alert.show();
     }
     
+    /**
+     * Method to set the triggers / handlers
+     */
     @Override
     public void setTriggers(MainController controller) {
         // Points of interest checkboxes listener
@@ -261,23 +288,31 @@ public class MainView implements IMainView {
         this.statisticsButton.setOnAction(event -> controller.openStatistics());
         this.undoButton.setOnAction(event -> controller.undoCalculate());
     }
-    
+    /**
+     * Method to draw the graph
+     */
     @Override
     public void plotGraph() {
         this.graphPanel.plotGraph();
         this.setStartPoiColor();
     }
-    
+    /**
+     * Method to mark a point of interest to visit
+     */
     @Override
     public void markPoiToVisit(IVertex<PointOfInterest> vertex) {
         this.graphPanel.setVertexColor(vertex, Color.RED, Color.BLACK);
     }
-    
+    /**
+     * Method to unmark a selected point of interest
+     */
     @Override
     public void unmarkPoiToVisit(IVertex<PointOfInterest> vertex) {
         this.graphPanel.setVertexColor(vertex, Color.ORANGE, Color.CORAL);
     }
-    
+    /**
+     * Method to show a question window
+     */
     @Override
     public void showNifQuestionDialog(MainController controller) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
