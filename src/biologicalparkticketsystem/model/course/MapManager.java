@@ -20,8 +20,8 @@ public class MapManager {
     
     private DiGraph<PointOfInterest, Connection> digraph;
     private PointOfInterest startPoint;
-    
-    public MapManager() throws MapManagerException {
+
+    public MapManager(String mapFilePath) throws MapManagerException {
         this.digraph = new DiGraph<>();
         this.startPoint = null;
     }
@@ -44,78 +44,9 @@ public class MapManager {
             File mapFile = new File(mapFilePath);
             Scanner scanner = new Scanner(mapFile);
 
-            Map<Integer, PointOfInterest> loadedPOIs = new LinkedHashMap<>(); // Used for performance optimization
+            Map<Integer, PointOfInterest> loadedPOIs = loadMapPois(scanner);
 
-            // Add POIs
-            while (!scanner.hasNextInt()) {
-                scanner.nextLine();
-            }
-            int numberPOIs = scanner.nextInt();
-            scanner.nextLine();
-            int countPOIs = 0;
-            while (countPOIs < numberPOIs && scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                String[] fields = line.split(", ");
-                if (fields.length != 2) {
-                    throw new MapManagerException("Expected a POI with 2 fields while reading park map file");
-                }
-                PointOfInterest poi = new PointOfInterest(
-                        Integer.parseInt(fields[0]),
-                        fields[1]
-                );
-                addPointOfInterest(poi);
-                loadedPOIs.put(poi.getPoiId(), poi);
-
-                ++countPOIs;
-            }
-            if (numberPOIs != countPOIs) {
-                throw new MapManagerException("Expected " + numberPOIs + " POIs from park map file but found " + countPOIs);
-            }
-
-            // Add connections
-            while (!scanner.hasNextInt()) {
-                scanner.nextLine();
-            }
-            int numberConnections = scanner.nextInt();
-            scanner.nextLine();
-            int countConnections = 0;
-            while (countConnections < numberConnections && scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                String[] fields = line.split(", ");
-                if (fields.length != 8) {
-                    throw new MapManagerException("Expected a Connection with 8 fields while reading park map file");
-                }
-                Connection con = null;
-                switch (fields[1]) {
-                    case "ponte": 
-                        con = new ConnectionBridge(
-                            Integer.parseInt(fields[0]),
-                            fields[2],
-                            Integer.parseInt(fields[6]),
-                            Integer.parseInt(fields[7]),
-                            Boolean.parseBoolean(fields[5])
-                        );
-                        break;
-
-                    case "caminho":
-                        con = new ConnectionPath(
-                            Integer.parseInt(fields[0]),
-                            fields[2],
-                            Integer.parseInt(fields[6]),
-                            Integer.parseInt(fields[7]),
-                            Boolean.parseBoolean(fields[5])
-                        );
-                        break;
-                }
-                int startPoiId = Integer.parseInt(fields[3]);
-                int endPoiId = Integer.parseInt(fields[4]);
-                addConnection(loadedPOIs.get(startPoiId), loadedPOIs.get(endPoiId), con);
-
-                ++countConnections;
-            }
-            if (numberConnections != countConnections) {
-                throw new MapManagerException("Expected " + numberConnections + " Connections from park map file but found " + countConnections);
-            }
+            loadMapConnections(scanner, loadedPOIs);
 
             // Set startPoint
             this.startPoint = loadedPOIs.entrySet().iterator().next().getValue();
@@ -126,12 +57,83 @@ public class MapManager {
         }
     }
     
-    /**
-     * Method to get a point of interest by its id
-     * @param id poi id
-     * @return point of interest instance
-     * @throws MapManagerException
-     */
+    private Map<Integer, PointOfInterest> loadMapPois(Scanner scanner) throws MapManagerException {
+        Map<Integer, PointOfInterest> loadedPOIs = new LinkedHashMap<>();
+        
+        while (!scanner.hasNextInt()) {
+            scanner.nextLine();
+        }
+        int numberPOIs = scanner.nextInt();
+        scanner.nextLine();
+        int countPOIs = 0;
+        while (countPOIs < numberPOIs && scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            String[] fields = line.split(", ");
+            if (fields.length != 2) {
+                throw new MapManagerException("Expected a POI with 2 fields while reading park map file");
+            }
+            PointOfInterest poi = new PointOfInterest(
+                    Integer.parseInt(fields[0]),
+                    fields[1]
+            );
+            addPointOfInterest(poi);
+            loadedPOIs.put(poi.getPoiId(), poi);
+
+            ++countPOIs;
+        }
+        if (numberPOIs != countPOIs) {
+            throw new MapManagerException("Expected " + numberPOIs + " POIs from park map file but found " + countPOIs);
+        }
+        
+        return loadedPOIs;
+    }
+    
+    private void loadMapConnections(Scanner scanner, Map<Integer, PointOfInterest> loadedPOIs) throws MapManagerException {
+        while (!scanner.hasNextInt()) {
+            scanner.nextLine();
+        }
+        int numberConnections = scanner.nextInt();
+        scanner.nextLine();
+        int countConnections = 0;
+        while (countConnections < numberConnections && scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            String[] fields = line.split(", ");
+            if (fields.length != 8) {
+                throw new MapManagerException("Expected a Connection with 8 fields while reading park map file");
+            }
+            Connection con = null;
+            switch (fields[1]) {
+                case "ponte": 
+                    con = new ConnectionBridge(
+                        Integer.parseInt(fields[0]),
+                        fields[2],
+                        Integer.parseInt(fields[6]),
+                        Integer.parseInt(fields[7]),
+                        Boolean.parseBoolean(fields[5])
+                    );
+                    break;
+
+                case "caminho":
+                    con = new ConnectionPath(
+                        Integer.parseInt(fields[0]),
+                        fields[2],
+                        Integer.parseInt(fields[6]),
+                        Integer.parseInt(fields[7]),
+                        Boolean.parseBoolean(fields[5])
+                    );
+                    break;
+            }
+            int startPoiId = Integer.parseInt(fields[3]);
+            int endPoiId = Integer.parseInt(fields[4]);
+            addConnection(loadedPOIs.get(startPoiId), loadedPOIs.get(endPoiId), con);
+
+            ++countConnections;
+        }
+        if (numberConnections != countConnections) {
+            throw new MapManagerException("Expected " + numberConnections + " Connections from park map file but found " + countConnections);
+        }
+    }
+    
     public PointOfInterest getPointOfInterestById(int id) throws MapManagerException {
         IVertex<PointOfInterest> find = null;
         
