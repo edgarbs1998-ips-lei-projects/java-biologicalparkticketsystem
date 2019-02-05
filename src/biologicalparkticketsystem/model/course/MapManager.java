@@ -21,7 +21,7 @@ public class MapManager {
     private DiGraph<PointOfInterest, Connection> digraph;
     private PointOfInterest startPoint;
 
-    public MapManager(String mapFilePath) throws MapManagerException {
+    public MapManager() throws MapManagerException {
         this.digraph = new DiGraph<>();
         this.startPoint = null;
     }
