@@ -745,10 +745,10 @@ public class DocumentManager {
                 if (Desktop.isDesktopSupported()) {
                     Desktop.getDesktop().open(pdfFile);
                 } else {
-                    //System.out.println("Awt Desktop is not supported!");
+                    LoggerManager.getInstance().log("Awt Desktop is not supported!");
                 }
             } else {
-                //System.out.println("File is not exists!");
+                LoggerManager.getInstance().log("File is not exists!");
             }
         } catch (IOException ex) {
             LoggerManager.getInstance().log(ex);
